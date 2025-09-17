@@ -28,7 +28,7 @@ from aiogram_calendar import SimpleCalendar, SimpleCalendarCallback, DialogCalen
 import operator
 
 storage = MemoryStorage()
-bot = Bot(token="")
+bot = Bot(token="8322108172:AAHM-T1Bi-HzLuMr9lJXLkx-vzXeMdCzkig")
 dp = Dispatcher(storage=storage)
 
 

@@ -347,10 +347,5 @@ def deleteBook(book_id):
     else:
         return render_template('deleteBook.html', book=bookToDelete)
 
-
-
-
-
-
 if __name__ == "__main__":
     app.run(host='192.168.0.149', port=5000, debug=True)
