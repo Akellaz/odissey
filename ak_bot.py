@@ -32,9 +32,6 @@ bot = Bot(token="")
 dp = Dispatcher(storage=storage)
 
 
-
-
-
 class MySG(StatesGroup):
     window1 = State()  #Выбор Добавить/Посмотреть
     window2 = State()  #Дата
@@ -48,14 +45,10 @@ async def calendar_show(callback: CallbackQuery, button: Button, manager: Dialog
         "_",
         reply_markup=await SimpleCalendar().start_calendar()
     )
-    
-    
+ 
 # let's assume this is our window data getter
 async def get_data(dialog_manager: DialogManager, **kwargs):
-    
 
-    #checked_items_ids = dialog_manager.find("m_fruits").get_checked()
-    
     fruits = [
         ("8:00", '8:00'),
         ("9:00", '9:00'),
@@ -83,46 +76,30 @@ async def get_data(dialog_manager: DialogManager, **kwargs):
         "count": len(fruits),
         "fruits2": fruits2,
         "count2": len(fruits2),
-        #"times": checked_items_ids,
     }
-    
     
 # # ДОБАВИТЬ
 async def getter(dialog_manager: DialogManager, **kwargs):
     
     checked_items_ids = dialog_manager.find("m_fruits").get_checked()
-    
 
-    #dialog_manager.dialog_data['firstname'] = kwargs['event_from_user'].first_name
-    #dialog_manager.dialog_data['lastname'] = kwargs['event_from_user'].last_name
     dialog_manager.dialog_data['username'] = kwargs['event_from_user'].username
-
-    #author_first = dialog_manager.dialog_data['firstname']
-    #author_last = dialog_manager.dialog_data['lastname']
     author_user = dialog_manager.dialog_data['username']
-
     date_db = dialog_manager.find("date").get_value()
-    #time_db = dialog_manager.find("time").get_value()
     name_db = dialog_manager.find("name").get_value()
     
     connection = sqlite3.connect('ak_data.db')
     cursor = connection.cursor()
-    
-    
-    
+
     for item in checked_items_ids:
         cursor.execute("INSERT INTO book (name, date, time, author) VALUES ('"+name_db+"','"+date_db+"','"+item+"','"+author_user+"')")      
     connection.commit()
     return {
         "date": dialog_manager.find("date").get_value(),
-        #"time": time_db,
         "name": dialog_manager.find("name").get_value(),
-        #"author_first": author_first,
-        #"author_last": author_last,
         "author_user": author_user,
         "times": checked_items_ids,
     }
-
 
 dialog = Dialog(
     Window(
@@ -149,8 +126,6 @@ dialog = Dialog(
     
     Window(
         Const("Шаг 2"),
-        #Const("Введите время в формате hh:mm"),
-        #TextInput(id="time", on_success=Next()),
 
         Multiselect(
                    Format("✓ {item[0]}"),  # Пример: `✓ Apple`
@@ -166,8 +141,7 @@ dialog = Dialog(
                    item_id_getter=operator.itemgetter(1),
                    items="fruits2",
                ),
-  
-        #Back(text=Const("Назад")),
+
         Next(text=Const("вперед")),
         getter=get_data,
         state=MySG.window3,
@@ -192,7 +166,6 @@ dialog = Dialog(
     ),
 )
 dp.include_router(dialog)
-
 
 # ПОСМОТРЕТЬ # Simple calendar usage
 @dp.callback_query(SimpleCalendarCallback.filter())
