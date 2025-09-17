@@ -198,35 +198,3 @@ setup_dialogs(dp)
 if __name__ == '__main__':
     dp.run_polling(bot)
 
-'''
-       Group(
-    Row(
-        Button(Const("8:00"), id="8", on_click=Next()),
-        Button(Const("9:00"), id="9"),
-        Button(Const("10:00"), id="10"),
-        Button(Const("11:00"), id="11"),
-        Button(Const("12:00"), id="12"),
-        Button(Const("13:00"), id="13"),
-        Button(Const("14:00"), id="14"),
-        Button(Const("15:00"), id="15"),
-       
-    ),
-        Row(
-        Button(Const("16:00"), id="16"),
-        Button(Const("17:00"), id="17"),
-        Button(Const("18:00"), id="18"),
-        Button(Const("19:00"), id="19"),
-        Button(Const("20:00"), id="20"),
-        Button(Const("21:00"), id="21"),
-        Button(Const("22:00"), id="22"),
-        Button(Const("23:00"), id="23"),
-    ), 
-    ),
-
-    cursor.execute("SELECT time FROM book WHERE date = '"+date_db+"'")
-    results = cursor.fetchall()
-
-    for i in results:
-        if results[i] == time_db:
-            time_db = None
-''' 
