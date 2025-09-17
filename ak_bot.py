@@ -93,12 +93,12 @@ async def getter(dialog_manager: DialogManager, **kwargs):
     checked_items_ids = dialog_manager.find("m_fruits").get_checked()
     
 
-    dialog_manager.dialog_data['firstname'] = kwargs['event_from_user'].first_name
-    dialog_manager.dialog_data['lastname'] = kwargs['event_from_user'].last_name
+    #dialog_manager.dialog_data['firstname'] = kwargs['event_from_user'].first_name
+    #dialog_manager.dialog_data['lastname'] = kwargs['event_from_user'].last_name
     dialog_manager.dialog_data['username'] = kwargs['event_from_user'].username
 
-    author_first = dialog_manager.dialog_data['firstname']
-    author_last = dialog_manager.dialog_data['lastname']
+    #author_first = dialog_manager.dialog_data['firstname']
+    #author_last = dialog_manager.dialog_data['lastname']
     author_user = dialog_manager.dialog_data['username']
 
     date_db = dialog_manager.find("date").get_value()
@@ -107,14 +107,18 @@ async def getter(dialog_manager: DialogManager, **kwargs):
     
     connection = sqlite3.connect('ak_data.db')
     cursor = connection.cursor()
-    cursor.execute("INSERT INTO book (name, date, author) VALUES ('"+name_db+"','"+date_db+"','"+author_user+"')")      
+    
+    
+    
+    for item in checked_items_ids:
+        cursor.execute("INSERT INTO book (name, date, time, author) VALUES ('"+name_db+"','"+date_db+"','"+item+"','"+author_user+"')")      
     connection.commit()
     return {
         "date": dialog_manager.find("date").get_value(),
         #"time": time_db,
         "name": dialog_manager.find("name").get_value(),
-        "author_first": author_first,
-        "author_last": author_last,
+        #"author_first": author_first,
+        #"author_last": author_last,
         "author_user": author_user,
         "times": checked_items_ids,
     }
@@ -178,14 +182,9 @@ dialog = Dialog(
     Window(
         Jinja(
             "<b>Дата</b>: {{date}}\n"
-            #"<b>Время</b>: {{time}}\n"
-            "{{name}}\n"
-            "{{author_first}}\n"
-            "{{author_last}}\n"
-            "{{author_user}}\n"
-            "<b>фрукт</b>: {{times}}\n"
-
-            
+            "<b>Время</b>: {{times}}\n"
+            "<b>Имя</b>: {{name}}\n"
+            "<b>Автор</b>: {{author_user}}"  
         ),
         state=MySG.window5,
         getter=getter,
