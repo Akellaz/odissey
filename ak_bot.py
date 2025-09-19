@@ -1,12 +1,10 @@
 import sqlite3
 import operator
-from typing import Any
+#from typing import Any
 from datetime import datetime, date
 from aiogram import Bot, Dispatcher
 
-
 from babel.dates import get_day_names, get_month_names
-
 
 from aiogram_dialog import Window, Dialog, DialogManager, StartMode, setup_dialogs
 
@@ -14,36 +12,20 @@ from aiogram.filters import Command
 from aiogram.filters.state import StatesGroup, State
 from aiogram.filters.callback_data import CallbackData
 
-from aiogram.types import CallbackQuery, Message
-
-from aiogram_dialog.widgets.kbd import Button, Back, Next, Multiselect
-from aiogram_dialog.widgets.text import Const, Format, Jinja
-from aiogram_dialog.widgets.input import TextInput
-
-from aiogram.fsm.storage.memory import MemoryStorage
-
-from aiogram_calendar import SimpleCalendar, SimpleCalendarCallback, \
-    get_user_locale
-
-
-
-from typing import Dict
-
-from aiogram_dialog.widgets.kbd import (
-    Calendar, CalendarScope, CalendarUserConfig,
-)
-from aiogram_dialog.widgets.kbd.calendar_kbd import (
-    CalendarDaysView, CalendarMonthView, CalendarScopeView, CalendarYearsView,
-)
-
-
+from aiogram.types import CallbackQuery, Message 
 
 from aiogram_dialog.widgets.kbd import (
     Calendar,
     CalendarScope,
-    ManagedCalendar,
-    SwitchTo,
+    #ManagedCalendar,
+    #SwitchTo,
+    Button,
+    Back,
+    Next,
+    Multiselect,
+    #CalendarUserConfig,
 )
+
 from aiogram_dialog.widgets.kbd.calendar_kbd import (
     DATE_TEXT,
     TODAY_TEXT,
@@ -52,7 +34,14 @@ from aiogram_dialog.widgets.kbd.calendar_kbd import (
     CalendarScopeView,
     CalendarYearsView,
 )
-from aiogram_dialog.widgets.text import Const, Format, Text
+
+from aiogram_dialog.widgets.text import Const, Format, Jinja, Text
+from aiogram_dialog.widgets.input import TextInput
+
+from aiogram.fsm.storage.memory import MemoryStorage
+
+from aiogram_calendar import SimpleCalendar, SimpleCalendarCallback, \
+    get_user_locale
 
 
 SELECTED_DAYS_KEY = "selected_dates"
@@ -124,10 +113,9 @@ class CustomCalendar(Calendar):
 
 class MySG(StatesGroup):
     window1 = State()  #Выбор Добавить/Посмотреть
-    window2 = State()  #Дата
-    window3 = State()  #Время
-    window4 = State()  #Имя
-    window5 = State()  #Результат
+    window2 = State()  #Дата и Время
+    window3 = State()  #Имя
+    window4 = State()  #Результат
 
 
 
@@ -210,65 +198,68 @@ dialog = Dialog(
         Format("Привет, {event.from_user.username}!"), 
         
         Button(
-            Const("Добавить"),
+            Const("✓ Забронировать репетицию"),
             id="go",
             on_click=Next(),
             ),
         Button(
-            Const("Посмотреть"),
+            Const("✓ Посмотреть календарь"),
             id="button1", 
             on_click=calendar_show,
             ), 
         state=MySG.window1,
     ),
+    
     Window(
-        Const("Шаг 1"),
-
+        Const("Напиши название группы и нажми Ввод"),
+        TextInput(id="name", on_success=Next()),
+        Back(text=Const("Назад")),
+        state=MySG.window2,
+    ),
+    
+    
+    Window(
+        Const("Сначала выбери дату. Просто нажми на нужное число"),
+        Const("Затем в нижней части выбери время. Можно несколько слотов"),
+        Const("Когда дата нажата и галочки на нужное время стоят, то смело жми Вперёд!"),
          CustomCalendar(
             id="cal",
             on_click=on_date_selected,
         ),   
-        Next(text=Const("вперед")),
-        state=MySG.window2,
-    ),
-    
-    Window(
-        Const("Шаг 2"),
-
-        Multiselect(
-                   Format("✓ {item[0]}"),  # Пример: `✓ Apple`
-                   Format("{item[0]}"),
-                   id="m_time_slots",
-                   item_id_getter=operator.itemgetter(1),
-                   items="time_slots",
-               ),
-        Multiselect(
-                   Format("✓ {item[0]}"),  # Пример: `✓ Apple`
-                   Format("{item[0]}"),
-                   id="m_time_slots",
-                   item_id_getter=operator.itemgetter(1),
-                   items="time_slots2",
-               ),
-
+         
+         
+         Multiselect(
+                    Format("✓ {item[0]}"),  # Пример: `✓ Apple`
+                    Format("{item[0]}"),
+                    id="m_time_slots",
+                    item_id_getter=operator.itemgetter(1),
+                    items="time_slots",
+                ),
+         Multiselect(
+                    Format("✓ {item[0]}"),  # Пример: `✓ Apple`
+                    Format("{item[0]}"),
+                    id="m_time_slots",
+                    item_id_getter=operator.itemgetter(1),
+                    items="time_slots2",
+                ),
+         
+         
         Next(text=Const("вперед")),
         getter=get_time,
         state=MySG.window3,
     ),
+    
+
+
     Window(
-        Const("Шаг 3"),
-        Const("Введите имя"),
-        TextInput(id="name", on_success=Next()),
-        Back(text=Const("Назад")),
-        state=MySG.window4,
-    ),
-    Window(
+        Const("Ура! Время забронировано"),
         Jinja(
             "<b>Дата</b>: {{date}}\n"
             "<b>Время</b>: {{times}}\n"
             "<b>Имя</b>: {{name}}\n"
             "<b>Автор</b>: {{author_user}}\n"  
         ),
-        state=MySG.window5,
+        state=MySG.window4,
         getter=getter,
         parse_mode="html",
     ),
