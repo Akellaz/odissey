@@ -1,35 +1,125 @@
-from aiogram import Bot, Dispatcher
-from aiogram.filters.state import StatesGroup, State
-from aiogram.types import CallbackQuery
 import sqlite3
-from aiogram_dialog import Window, Dialog, DialogManager
-from aiogram_dialog.widgets.kbd import Button, Back, Multiselect
-from aiogram_dialog.widgets.text import Const, Format
-from datetime import datetime
-from aiogram import Bot, Dispatcher
-from aiogram.fsm.storage.memory import MemoryStorage
-from aiogram.filters.state import StatesGroup, State
-from aiogram_dialog import Window
-#from aiogram_dialog.widgets.kbd import Button
-from aiogram.filters import Command
-from aiogram.types import Message
-from aiogram_dialog import StartMode, SubManager, ChatEvent
-from aiogram_dialog import setup_dialogs
-from aiogram.filters.callback_data import CallbackData
-from datetime import date 
-from aiogram_dialog.widgets.kbd import Calendar, Group, Row 
-from aiogram_dialog.widgets.input import MessageInput
-from aiogram_dialog.widgets.input import TextInput
-from aiogram_dialog.widgets.kbd import Next
-from aiogram_dialog.widgets.text import Const, Jinja
-from aiogram_calendar import SimpleCalendar, SimpleCalendarCallback, DialogCalendar, DialogCalendarCallback, \
-    get_user_locale
-#from aiogram_dialog.widgets.kbd import  Button, ScrollingGroup
 import operator
+from typing import Any
+from datetime import datetime, date
+from aiogram import Bot, Dispatcher
+
+
+from babel.dates import get_day_names, get_month_names
+
+
+from aiogram_dialog import Window, Dialog, DialogManager, StartMode, setup_dialogs
+
+from aiogram.filters import Command
+from aiogram.filters.state import StatesGroup, State
+from aiogram.filters.callback_data import CallbackData
+
+from aiogram.types import CallbackQuery, Message
+
+from aiogram_dialog.widgets.kbd import Button, Back, Next, Multiselect
+from aiogram_dialog.widgets.text import Const, Format, Jinja
+from aiogram_dialog.widgets.input import TextInput
+
+from aiogram.fsm.storage.memory import MemoryStorage
+
+from aiogram_calendar import SimpleCalendar, SimpleCalendarCallback, \
+    get_user_locale
+
+
+
+from typing import Dict
+
+from aiogram_dialog.widgets.kbd import (
+    Calendar, CalendarScope, CalendarUserConfig,
+)
+from aiogram_dialog.widgets.kbd.calendar_kbd import (
+    CalendarDaysView, CalendarMonthView, CalendarScopeView, CalendarYearsView,
+)
+
+
+
+from aiogram_dialog.widgets.kbd import (
+    Calendar,
+    CalendarScope,
+    ManagedCalendar,
+    SwitchTo,
+)
+from aiogram_dialog.widgets.kbd.calendar_kbd import (
+    DATE_TEXT,
+    TODAY_TEXT,
+    CalendarDaysView,
+    CalendarMonthView,
+    CalendarScopeView,
+    CalendarYearsView,
+)
+from aiogram_dialog.widgets.text import Const, Format, Text
+
+
+SELECTED_DAYS_KEY = "selected_dates"
+
+
 
 storage = MemoryStorage()
 bot = Bot(token="8322108172:AAHM-T1Bi-HzLuMr9lJXLkx-vzXeMdCzkig")
 dp = Dispatcher(storage=storage)
+
+
+
+class WeekDay(Text):
+    async def _render_text(self, data, manager: DialogManager) -> str:
+        selected_date: date = data["date"]
+        locale = manager.event.from_user.language_code
+        return get_day_names(
+            width="short", context="stand-alone", locale=locale,
+        )[selected_date.weekday()].title()
+
+
+class MarkedDay(Text):
+    def __init__(self, mark: str, other: Text):
+        super().__init__()
+        self.mark = mark
+        self.other = other
+
+    async def _render_text(self, data, manager: DialogManager) -> str:
+        current_date: date = data["date"]
+        serial_date = current_date.isoformat()
+        selected = manager.dialog_data.get(SELECTED_DAYS_KEY, [])
+        if serial_date in selected:
+            return self.mark
+        return await self.other.render_text(data, manager)
+
+
+class Month(Text):
+    async def _render_text(self, data, manager: DialogManager) -> str:
+        selected_date: date = data["date"]
+        locale = manager.event.from_user.language_code
+        return get_month_names(
+            "wide", context="stand-alone", locale=locale,
+        )[selected_date.month].title()
+
+
+class CustomCalendar(Calendar):
+    def _init_views(self) -> dict[CalendarScope, CalendarScopeView]:
+        return {
+            CalendarScope.DAYS: CalendarDaysView(
+                self._item_callback_data,
+                date_text=MarkedDay("🔴", DATE_TEXT),
+                today_text=MarkedDay("⭕", TODAY_TEXT),
+                header_text="~~~~~ " + Month() + " ~~~~~",
+                weekday_text=WeekDay(),
+                next_month_text=Month() + " >>",
+                prev_month_text="<< " + Month(),
+            ),
+            CalendarScope.MONTHS: CalendarMonthView(
+                self._item_callback_data,
+                month_text=Month(),
+                header_text="~~~~~ " + Format("{date:%Y}") + " ~~~~~",
+                this_month_text="[" + Month() + "]",
+            ),
+            CalendarScope.YEARS: CalendarYearsView(
+                self._item_callback_data,
+            ),
+        }
 
 
 class MySG(StatesGroup):
@@ -39,6 +129,9 @@ class MySG(StatesGroup):
     window4 = State()  #Имя
     window5 = State()  #Результат
 
+
+
+
 # # ПОСМОТРЕТЬ
 async def calendar_show(callback: CallbackQuery, button: Button, manager: DialogManager):
     await callback.message.answer(
@@ -47,9 +140,9 @@ async def calendar_show(callback: CallbackQuery, button: Button, manager: Dialog
     )
  
 # let's assume this is our window data getter
-async def get_data(dialog_manager: DialogManager, **kwargs):
+async def get_time(dialog_manager: DialogManager, **kwargs):
 
-    fruits = [
+    time_slots = [
         ("8:00", '8:00'),
         ("9:00", '9:00'),
         ("10:00", '10:00'),
@@ -60,7 +153,7 @@ async def get_data(dialog_manager: DialogManager, **kwargs):
         ("15:00", '15:00'),
         
     ]
-    fruits2 = [
+    time_slots2 = [
         ("16:00", '16:00'),
         ("17:00", '17:00'),
         ("18:00", '18:00'),
@@ -72,38 +165,50 @@ async def get_data(dialog_manager: DialogManager, **kwargs):
     ]
     
     return {
-        "fruits": fruits,
-        "count": len(fruits),
-        "fruits2": fruits2,
-        "count2": len(fruits2),
+        "time_slots": time_slots,
+        "count": len(time_slots),
+        "time_slots2": time_slots2,
+        "count2": len(time_slots2),
     }
     
 # # ДОБАВИТЬ
 async def getter(dialog_manager: DialogManager, **kwargs):
     
-    checked_items_ids = dialog_manager.find("m_fruits").get_checked()
+    checked_time_slots_ids = dialog_manager.find("m_time_slots").get_checked()
 
     dialog_manager.dialog_data['username'] = kwargs['event_from_user'].username
     author_user = dialog_manager.dialog_data['username']
-    date_db = dialog_manager.find("date").get_value()
+    #date_db = dialog_manager.find("date").get_value()
     name_db = dialog_manager.find("name").get_value()
     
     connection = sqlite3.connect('ak_data.db')
     cursor = connection.cursor()
 
-    for item in checked_items_ids:
-        cursor.execute("INSERT INTO book (name, date, time, author) VALUES ('"+name_db+"','"+date_db+"','"+item+"','"+author_user+"')")      
+    for item in checked_time_slots_ids:
+        cursor.execute("INSERT INTO book (name, date, time, author) VALUES ('"+name_db+"','"+str(g_selected_date)+"','"+item+"','"+author_user+"')")      
     connection.commit()
     return {
-        "date": dialog_manager.find("date").get_value(),
+
+        "date": str(g_selected_date),
         "name": dialog_manager.find("name").get_value(),
         "author_user": author_user,
-        "times": checked_items_ids,
+        "times": checked_time_slots_ids,
     }
 
+async def on_date_selected(callback: CallbackQuery, widget, manager: DialogManager, selected_date: date):
+
+    global g_selected_date
+    g_selected_date = selected_date
+    
+    return g_selected_date
+
+
+
+############### WINDOWS PART ###################
 dialog = Dialog(
     Window(
         Format("Привет, {event.from_user.username}!"), 
+        
         Button(
             Const("Добавить"),
             id="go",
@@ -118,9 +223,12 @@ dialog = Dialog(
     ),
     Window(
         Const("Шаг 1"),
-        Const("Введите дату в формате dd/mm/yyyy"),
-        TextInput(id="date", on_success=Next()),
-        Back(text=Const("Назад")),
+
+         CustomCalendar(
+            id="cal",
+            on_click=on_date_selected,
+        ),   
+        Next(text=Const("вперед")),
         state=MySG.window2,
     ),
     
@@ -130,20 +238,20 @@ dialog = Dialog(
         Multiselect(
                    Format("✓ {item[0]}"),  # Пример: `✓ Apple`
                    Format("{item[0]}"),
-                   id="m_fruits",
+                   id="m_time_slots",
                    item_id_getter=operator.itemgetter(1),
-                   items="fruits",
+                   items="time_slots",
                ),
         Multiselect(
                    Format("✓ {item[0]}"),  # Пример: `✓ Apple`
                    Format("{item[0]}"),
-                   id="m_fruits",
+                   id="m_time_slots",
                    item_id_getter=operator.itemgetter(1),
-                   items="fruits2",
+                   items="time_slots2",
                ),
 
         Next(text=Const("вперед")),
-        getter=get_data,
+        getter=get_time,
         state=MySG.window3,
     ),
     Window(
@@ -158,7 +266,7 @@ dialog = Dialog(
             "<b>Дата</b>: {{date}}\n"
             "<b>Время</b>: {{times}}\n"
             "<b>Имя</b>: {{name}}\n"
-            "<b>Автор</b>: {{author_user}}"  
+            "<b>Автор</b>: {{author_user}}\n"  
         ),
         state=MySG.window5,
         getter=getter,
@@ -176,7 +284,7 @@ async def process_simple_calendar(callback_query: CallbackQuery, callback_data: 
     calendar.set_dates_range(datetime(2022, 1, 1), datetime(2025, 12, 31))
     selected, date = await calendar.process_selection(callback_query, callback_data)
     if selected:
-        choice = f'{date.strftime("%d/%m/%Y")}'
+        choice = f'{date.strftime("%Y-%m-%d")}'
         rsum=[]
         connection = sqlite3.connect('ak_data.db')
         cursor = connection.cursor()
@@ -186,7 +294,7 @@ async def process_simple_calendar(callback_query: CallbackQuery, callback_data: 
             rsum.append(i)
          
         await callback_query.message.answer(
-            f'{date.strftime("%d/%m/%Y")}\n'+'\n'.join(map(str, rsum)),
+            f'{date.strftime("%Y-%m-%d")}\n'+'\n'.join(map(str, rsum)),
         )
 
 @dp.message(Command("start"))

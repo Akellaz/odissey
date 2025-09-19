@@ -286,9 +286,6 @@ def desna():
 def oka():
     return render_template('sup/oka.html', title='Ока')
 
-@app.route('/sup_12.html')
-def sup_map_oka():
-    return render_template('sup/sup_12.html', title='Сап-12')
 
 @app.route('/sup_map_istra.html')
 def sup_map_istra():
