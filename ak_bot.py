@@ -114,8 +114,8 @@ class CustomCalendar(Calendar):
 class MySG(StatesGroup):
     window1 = State()  #Выбор Добавить/Посмотреть
     window2 = State()  #Дата и Время
-    window3 = State()  #Имя
-    window4 = State()  #Результат
+   # window3 = State()  #Имя
+    window3 = State()  #Результат
 
 
 
@@ -167,7 +167,7 @@ async def getter(dialog_manager: DialogManager, **kwargs):
     dialog_manager.dialog_data['username'] = kwargs['event_from_user'].username
     author_user = dialog_manager.dialog_data['username']
     #date_db = dialog_manager.find("date").get_value()
-    name_db = dialog_manager.find("name").get_value()
+    name_db = author_user
     
     connection = sqlite3.connect('ak_data.db')
     cursor = connection.cursor()
@@ -178,7 +178,7 @@ async def getter(dialog_manager: DialogManager, **kwargs):
     return {
 
         "date": str(g_selected_date),
-        "name": dialog_manager.find("name").get_value(),
+        #"name": dialog_manager.find("name").get_value(),
         "author_user": author_user,
         "times": checked_time_slots_ids,
     }
@@ -210,12 +210,7 @@ dialog = Dialog(
         state=MySG.window1,
     ),
     
-    Window(
-        Const("Напиши название группы и нажми Ввод"),
-        TextInput(id="name", on_success=Next()),
-        Back(text=Const("Назад")),
-        state=MySG.window2,
-    ),
+
     
     
     Window(
@@ -246,7 +241,7 @@ dialog = Dialog(
          
         Next(text=Const("Забить")),
         getter=get_time,
-        state=MySG.window3,
+        state=MySG.window2,
     ),
     
 
@@ -256,10 +251,10 @@ dialog = Dialog(
         Jinja(
             "<b>Дата</b>: {{date}}\n"
             "<b>Время</b>: {{times}}\n"
-            "<b>Имя</b>: {{name}}\n"
+            #"<b>Имя</b>: {{name}}\n"
             "<b>Автор</b>: {{author_user}}\n"  
         ),
-        state=MySG.window4,
+        state=MySG.window3,
         getter=getter,
         parse_mode="html",
     ),
