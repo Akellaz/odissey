@@ -12,7 +12,7 @@
 		<div class="Main">
 		 <ol>
 		   {% for book in books %}
-			<li>{{book.date}} - {{book.time}} - {{book.name}}- {{book.author}}</li>
+			<li>{{book.date}} - {{book.time}} - {{book.author}}</li>
 			<a href="{{url_for('editBook', book_id = book.id )}}">
 			  Изменить
 			</a>
