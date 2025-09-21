@@ -1,5 +1,6 @@
 from flask import Flask, render_template, redirect, url_for, request, session
 from bs4 import BeautifulSoup
+from flask import send_from_directory
 import requests
 import re
 import os
@@ -8,16 +9,21 @@ import sqlite3
 #import librosa
 #import librosa.display
 #import matplotlib.pyplot as plt
-import folium
+#import folium
 import json
-from ipyleaflet import Map, GeoJSON, AntPath
-from flask import Flask, render_template, request, redirect, url_for
+from ipyleaflet import Map, GeoJSON#, AntPath
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Book
 import subprocess
 import sys
+#import tg_admin
+#from OpenSSL import SSL
+#ASSETS_DIR = os.path.dirname(os.path.abspath(__file__))
 
+#context = SSL.Context(SSL.PROTOCOL_TLSv1_2)
+#context.use_privatekey_file('C:\Certbot\live\odissey.drumz.ru\privkey.pem')
+#context.use_certificate_file('C:\Certbot\live\odissey.drumz.ru\fullchain.pem')   
 
 app = Flask(__name__)
  
@@ -298,18 +304,22 @@ def sup_map():
 @app.route('/ak_bot')
 def ak_bot():
      subprocess.Popen([sys.executable, 'ak_bot.py'], shell = True)
-     return render_template("books.html")
+     return render_template("tg_books.html")
 
 
-# страница, которая будет отображать все книги в базе данных
-# Эта функция работает в режиме чтения.
+@app.route('/.well-known/acme-challenge/5MY6SAMpaOwCzMiG1sxvwjBgPreKnxtVIVYqV3HGoFs')
+def certbot():
+    return render_template('5MY6SAMpaOwCzMiG1sxvwjBgPreKnxtVIVYqV3HGoFs.html')
+
+############## Админка ######################
+
 @app.route('/books')
 def showBooks():
     books = session.query(Book).all()
-    return render_template("books.html", books=books)
+    return render_template("tg_books.html", books=books)
 
 
-# Эта функция позволит создать новую книгу и сохранить ее в базе данных.
+
 @app.route('/books/new/', methods=['GET', 'POST'])
 def newBook():
     if request.method == 'POST':
@@ -318,10 +328,9 @@ def newBook():
         session.commit()
         return redirect(url_for('showBooks'))
     else:
-        return render_template('newBook.html')
+        return render_template('tg_newBook.html')
 
 
-# Эта функция позволит нам обновить книги и сохранить их в базе данных.
 @app.route("/books/<int:book_id>/edit/", methods=['GET', 'POST'])
 def editBook(book_id):
     editedBook = session.query(Book).filter_by(id=book_id).one()
@@ -330,10 +339,9 @@ def editBook(book_id):
             editedBook.name = request.form['name']
             return redirect(url_for('showBooks'))
     else:
-        return render_template('editBook.html', book=editedBook)
+        return render_template('tg_editBook.html', book=editedBook)
 
 
-# Эта функция для удаления книг
 @app.route('/books/<int:book_id>/delete/', methods=['GET', 'POST'])
 def deleteBook(book_id):
     bookToDelete = session.query(Book).filter_by(id=book_id).one()
@@ -342,7 +350,21 @@ def deleteBook(book_id):
         session.commit()
         return redirect(url_for('showBooks', book_id=book_id))
     else:
-        return render_template('deleteBook.html', book=bookToDelete)
+        return render_template('tg_deleteBook.html', book=bookToDelete)
+
+
+
+
+
 
 if __name__ == "__main__":
-    app.run(host='192.168.0.149', port=5000, debug=True)
+    app.run(host='192.168.0.149', port=5000, debug=True, ssl_context=('fullchain.pem', 'privkey.pem') )
+    
+
+
+
+
+
+
+
+    

@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html lang="ru">
+
+	<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/tg_main.css') }}">
+	<title>Записи</title>
+	</head>
+	
+	<body>
+		<div class="Main">
+		 <ol>
+		   {% for book in books %}
+			<li>{{book.date}} - {{book.time}} - {{book.name}}- {{book.author}}</li>
+			<a href="{{url_for('editBook', book_id = book.id )}}">
+			  Изменить
+			</a>
+			<a href="{{url_for('deleteBook', book_id = book.id )}}" style="margin-left: 10px;">
+			  Удалить
+			</a>
+			<br> <br>
+		  {% endfor %}
+		 </ol>
+ 
+					
+		<a href="{{url_for('newBook')}}">  <button class="btn">Добавить запись</button> </a>
+							
+		<br/>								
+		<a href="/ak_bot">start</a>									
+											
+										
+		</div>
+		<script src="https://telegram.org/js/telegram-web-app.js"></script>
+	</body>
+</html>

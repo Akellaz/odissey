@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/tg_main.css') }}">
+	<title>Записи</title>
+	</head>
+	
+	
+<body>
+<div class="Main">
+<h2>Вы уверены, что хотите удалить {{book.name}}?</h2>
+
+<form action="#" method='post'>
+  <button type="submit">Удалить</button>
+</form>
+
+<a href='{{url_for('showBooks')}}'>
+  <button>Отменить</button>
+</a>								
+											
+										
+</div>
+		<script src="https://telegram.org/js/telegram-web-app.js"></script>
+	</body>
+</html>

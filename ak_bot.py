@@ -221,7 +221,7 @@ dialog = Dialog(
     Window(
         Const("Сначала выбери дату. Просто нажми на нужное число"),
         Const("Затем в нижней части выбери время. Можно несколько слотов"),
-        Const("Когда дата нажата и галочки на нужное время стоят, то смело жми Вперёд!"),
+        Const("Когда дата нажата и галочки на нужное время стоят, то смело жми Забить!"),
          CustomCalendar(
             id="cal",
             on_click=on_date_selected,
@@ -244,7 +244,7 @@ dialog = Dialog(
                 ),
          
          
-        Next(text=Const("вперед")),
+        Next(text=Const("Забить")),
         getter=get_time,
         state=MySG.window3,
     ),

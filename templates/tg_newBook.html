@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/tg_main.css') }}">
+	<title>Записи</title>
+	</head>
+	<body>
+<div class="Main">
+		<h1>Add a Book</h1>
+<form action="#" method="post">
+  <div class="form-group">
+  
+ <ul>
+ <li>
+    <label for="name">Название:</label>
+    <input type="text" maxlength="100" name="name" placeholder="Название">
+</li>
+<li>
+    <label for="date">Дата:</label>
+    <input maxlength="100" name="date" placeholder="yyyy-mm-dd">
+	</li>
+<li>
+    <label for="time">Время:</label>
+    <input maxlength="100" name="time" placeholder="hh:mm">
+	</li>
+</ul>
+    <button type="submit">Добавить</button>
+   </div>
+</form>							
+
+<a href='{{url_for('showBooks')}}'>
+  <button>Отменить</button>
+</a>											
+										
+</div>
+		<script src="https://telegram.org/js/telegram-web-app.js"></script>
+	</body>
+</html>
+
