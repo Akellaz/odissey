@@ -130,7 +130,8 @@ async def calendar_show(callback: CallbackQuery, button: Button, manager: Dialog
 # let's assume this is our window data getter
 async def get_time(dialog_manager: DialogManager, **kwargs):
 
-    time_slots = [
+
+    time_slots_zero1 = [
         ("8:00", '8:00'),
         ("9:00", '9:00'),
         ("10:00", '10:00'),
@@ -141,7 +142,7 @@ async def get_time(dialog_manager: DialogManager, **kwargs):
         ("15:00", '15:00'),
         
     ]
-    time_slots2 = [
+    time_slots_zero2 = [
         ("16:00", '16:00'),
         ("17:00", '17:00'),
         ("18:00", '18:00'),
@@ -150,7 +151,20 @@ async def get_time(dialog_manager: DialogManager, **kwargs):
         ("21:00", '21:00'),
         ("22:00", '22:00'),
         ("23:00", '23:00'),
-    ]
+]
+
+ 
+    
+    connection = sqlite3.connect('ak_data.db')
+    cursor = connection.cursor()
+    
+    cursor.execute("SELECT time FROM book WHERE date=?", (g_selected_date,))
+    
+    time_from_db = [row[0] for row in cursor.fetchall()]
+    time_slots = [(key, value) for key, value in time_slots_zero1 if value not in time_from_db]
+    time_slots2 = [(key, value) for key, value in time_slots_zero2 if value not in time_from_db]
+    
+
     
     return {
         "time_slots": time_slots,
@@ -183,30 +197,30 @@ async def getter(dialog_manager: DialogManager, **kwargs):
         "times": checked_time_slots_ids,
     }
 
-async def on_date_selected(callback: CallbackQuery, widget, manager: DialogManager, selected_date: date):
+
+async def win1_on_date_selected(callback: CallbackQuery, widget, manager: DialogManager, selected_date: date):
+
+    global g_selected_date
+    g_selected_date = selected_date
+    
+    await manager.next()
+
+async def win2_on_date_selected(callback: CallbackQuery, widget, manager: DialogManager, selected_date: date):
 
     global g_selected_date
     g_selected_date = selected_date
     
     return g_selected_date
 
-
-
 ############### WINDOWS PART ###################
 dialog = Dialog(
     Window(
         Format("Привет, {event.from_user.username}!"), 
         
-        Button(
-            Const("✓ Забронировать репетицию"),
-            id="go",
-            on_click=Next(),
-            ),
-        Button(
-            Const("✓ Посмотреть календарь"),
-            id="button1", 
-            on_click=calendar_show,
-            ), 
+        CustomCalendar(
+           id="cal",
+           on_click=win1_on_date_selected,
+       ),  
         state=MySG.window1,
     ),
     
@@ -214,12 +228,13 @@ dialog = Dialog(
     
     
     Window(
+        
         Const("Сначала выбери дату. Просто нажми на нужное число"),
         Const("Затем в нижней части выбери время. Можно несколько слотов"),
         Const("Когда дата нажата и галочки на нужное время стоят, то смело жми Забить!"),
          CustomCalendar(
             id="cal",
-            on_click=on_date_selected,
+            on_click=win2_on_date_selected,
         ),   
          
          
