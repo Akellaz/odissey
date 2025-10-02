@@ -6,10 +6,7 @@ import re
 import os
 import random
 import sqlite3
-#import librosa
-#import librosa.display
-#import matplotlib.pyplot as plt
-#import folium
+
 import json
 from ipyleaflet import Map, GeoJSON#, AntPath
 from sqlalchemy import create_engine
@@ -17,13 +14,8 @@ from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Book
 import subprocess
 import sys
-#import tg_admin
-#from OpenSSL import SSL
-#ASSETS_DIR = os.path.dirname(os.path.abspath(__file__))
-
-#context = SSL.Context(SSL.PROTOCOL_TLSv1_2)
-#context.use_privatekey_file('C:\Certbot\live\odissey.drumz.ru\privkey.pem')
-#context.use_certificate_file('C:\Certbot\live\odissey.drumz.ru\fullchain.pem')   
+from itertools import groupby
+  
 
 app = Flask(__name__)
  
@@ -313,10 +305,20 @@ def certbot():
 
 ############## Админка ######################
 
+
+
 @app.route('/books')
 def showBooks():
-    books = session.query(Book).all()
-    return render_template("tg_books.html", books=books)
+    books = session.query(Book).order_by(Book.date).all()
+
+    # Получение списков записей по дате
+    sorted_books = sorted(books, key=lambda x: x.date)
+    grouped_books = []
+    current_date = None
+    for key, group in groupby(sorted_books, lambda x: x.date):
+        grouped_books.append({"date": key, "books": list(group)})
+
+    return render_template("tg_books.html", books=grouped_books)
 
 
 
@@ -337,7 +339,16 @@ def editBook(book_id):
     if request.method == 'POST':
         if request.form['name']:
             editedBook.name = request.form['name']
-            return redirect(url_for('showBooks'))
+
+        if "author" in request.form and request.form["author"]:
+            editedBook.author = request.form["author"]
+
+        if "time" in request.form and request.form["time"]:
+            editedBook.time = request.form["time"]
+        
+        session.add(editedBook)
+        session.commit()
+        return redirect(url_for('showBooks'))
     else:
         return render_template('tg_editBook.html', book=editedBook)
 

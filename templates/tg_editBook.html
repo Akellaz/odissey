@@ -10,8 +10,21 @@
 <div class="Main">
 <form action="{{ url_for('editBook',book_id = book.id)}}" method="post">
   <div class="form-group">
+<p>
     <label for="name">Название:</label>
     <input type="text" class="form-control" name="name" value="{{book.name }}">
+</p>
+<p>
+	<label for="name">Автор:</label>
+	<input type="text" class="form-control" name="author" value="{{ book.author }}"/>
+</p>
+<p>	
+	<label for="time">Время:</label>
+	<input type="text" class="form-control" name="time" value="{{ book.time }}"/>
+</p>
+	
+	
+	
     <button type="submit">Обновить</button>
   </div>
 </form>

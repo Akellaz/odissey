@@ -8,29 +8,81 @@
 	<title>Записи</title>
 	</head>
 	
-	<body>
-		<div class="Main">
-		 <ol>
-		   {% for book in books %}
-			<li>{{book.date}} - {{book.time}} - {{book.author}}</li>
-			<a href="{{url_for('editBook', book_id = book.id )}}">
-			  Изменить
-			</a>
-			<a href="{{url_for('deleteBook', book_id = book.id )}}" style="margin-left: 10px;">
-			  Удалить
-			</a>
-			<br> <br>
-		  {% endfor %}
-		 </ol>
+	
  
-					
-		<a href="{{url_for('newBook')}}">  <button class="btn">Добавить запись</button> </a>
-							
-		<br/>								
-		<a href="/ak_bot">start</a>									
-											
-										
-		</div>
+<!-- templates/tg_books.html -->
+
+<style type="text/css">
+
+
+  h3 {
+    margin-top: 30px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #dee2e6;
+  }
+
+  ol, ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 15px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,.1);
+    transition: transform .2s ease-in-out;
+  }
+
+  li:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 10px rgba(0,0,0,.15);
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
+    display: inline-block;
+    font-size: 1.2em;
+    margin-right: 10px;
+  }
+
+  /* Дополнительные стили для иконок */
+  .edit-icon::before {
+    content: "\270E"; /* ✏️ */
+    font-weight: bold;
+    color: #ffc107;
+  }
+
+  .delete-icon::before {
+    content: "\274C"; /* ❌ */
+    font-weight: bold;
+    color: red;
+  }
+</style>
+
+<ol>
+  {% for group in books %}
+    <h3>{{ group.date }}</h3>
+    <ul>
+      {% for book in group.books %}
+        <li>
+          <!-- Информация о книге слева -->
+          <span>{{ book.time }} - {{ book.author }}</span>
+          
+          <!-- Кнопки справа -->
+          <a href="{{ url_for('editBook', book_id=book.id) }}" class="edit-icon"></a>
+          <a href="{{ url_for('deleteBook', book_id=book.id) }}" class="delete-icon"></a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% endfor %}
+</ol>
+<a href="/ak_bot">></a>
 		<script src="https://telegram.org/js/telegram-web-app.js"></script>
 	</body>
 </html>

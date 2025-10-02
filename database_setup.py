@@ -1,6 +1,6 @@
 import sys
 # для настройки баз данных
-from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy import Column, ForeignKey, Integer, String, DateTime
 
 # для определения таблицы и модели
 from sqlalchemy.ext.declarative import declarative_base
@@ -10,6 +10,7 @@ from sqlalchemy.orm import relationship
 
 # для настроек
 from sqlalchemy import create_engine
+from datetime import datetime
 
 # создание экземпляра declarative_base
 Base = declarative_base()
