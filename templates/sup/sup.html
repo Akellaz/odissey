@@ -98,14 +98,14 @@
 												<p><a href="static/json/{{ link }}.json">файл</a></p>
 												{% endif %}
 										</section>
+										
 										<section>
-										{% if t_moskva %}
-										 <h3>Температура воды</h3>
-											<p>Москва-река +{{ t_moskva }}°C</br>
-											Протва +{{ t_protva }}°C</br>
-											Ока +{{ t_oka }}°C</br>
-											Угра +{{ t_ugra }}°C</p>
-										{% endif %}
+											<h3>Температура воды</h3>
+											<button id="getTempBtn" class="button">Получить температуру</button>
+											<div id="temperatureLoading" style="display: none;">Загрузка...</div>
+											<div id="temperatureResults">
+												<!-- Температуры будут загружены по кнопке -->
+											</div>
 										</section>
 
 								</div>
@@ -197,13 +197,48 @@
 			</div>
 
 		<!-- Scripts -->
-
 			<script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
 			<script src="{{ url_for('static', filename='js/jquery.dropotron.min.js') }}"></script>
 			<script src="{{ url_for('static', filename='js/browser.min.js') }}"></script>
 			<script src="{{ url_for('static', filename='js/breakpoints.min.js') }}"></script>
 			<script src="{{ url_for('static', filename='js/util.js') }}"></script>
 			<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+			
+<script>
+    $(document).ready(function() {
+        $('#getTempBtn').click(function() {
+            // Скрыть кнопку и показать индикатор загрузки
+            $('#getTempBtn').hide();
+            $('#temperatureLoading').show();
+            $('#temperatureResults').html('');
+            
+            // Отправить AJAX запрос
+            $.ajax({
+                url: '/get_water_temperature',
+                method: 'POST',
+                success: function(response) {
+                    if (response.success) {
+                        let html = '<p>Москва-река +' + response.temperatures.t_moskva + '°C</br>' +
+                                   'Ока +' + response.temperatures.t_oka + '°C</br>' +
+                                   'Угра +' + response.temperatures.t_ugra + '°C</p>';
+                        $('#temperatureResults').html(html);
+                    } else {
+                        $('#temperatureResults').html('<p style="color: red;">Ошибка: ' + response.error + '</p>');
+                    }
+                },
+                error: function() {
+                    $('#temperatureResults').html('<p style="color: red;">Ошибка при загрузке данных</p>');
+                },
+                complete: function() {
+                    // Скрыть индикатор загрузки и показать кнопку
+                    $('#temperatureLoading').hide();
+                    $('#getTempBtn').show();
+                }
+            });
+        });
+    });
+</script>
+
 
 	</body>
 </html>

@@ -1,0 +1,64 @@
+{% extends "study/base.html" %}
+
+{% block content %}
+<h2>Финансовая статистика</h2>
+
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Общая прибыль</h5>
+                <h3 class="text-success">{{ "%.2f"|format(total_revenue) }} ₽</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <h4>Прибыль по месяцам</h4>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Месяц</th>
+                        <th>Прибыль (₽)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in monthly_revenue %}
+                    <tr>
+                        <td>{{ row['month'] }}</td>
+                        <td>{{ "%.2f"|format(row['revenue'] or 0) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <h4>Прибыль по ученикам</h4>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Ученик</th>
+                        <th>Занятий</th>
+                        <th>Прибыль (₽)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in student_revenue %}
+                    <tr>
+                        <td>{{ row['name'] }}</td>
+                        <td>{{ row['lesson_count'] or 0 }}</td>
+                        <td>{{ "%.2f"|format(row['total_price'] or 0) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

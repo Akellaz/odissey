@@ -1,0 +1,148 @@
+.drum-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.drum-controls {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.control-group {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.control-group input, 
+.control-group button, 
+.control-group select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.drum-grid {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.track-row {
+    display: flex;
+    border-bottom: 1px solid #eee;
+}
+
+.track-row:last-child {
+    border-bottom: none;
+}
+
+.track-name {
+    width: 120px;
+    padding: 15px;
+    font-weight: bold;
+    background: #f8f9fa;
+    text-align: right;
+    border-right: 1px solid #eee;
+}
+
+.track-steps {
+    display: flex;
+    flex: 1;
+    padding: 5px;
+}
+
+.step {
+    width: 40px;
+    height: 40px;
+    border: 2px solid #ddd;
+    margin: 2px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+/* Цветовые группы по 4 ячейки */
+.step.group-0 {
+    background-color: #fff3cd;
+    border-color: #ffeaa7;
+}
+
+.step.group-0.active {
+    background-color: #ffc107;
+    border-color: #e0a800;
+}
+
+.step.group-1 {
+    background-color: #d1ecf1;
+    border-color: #b8daff;
+}
+
+.step.group-1.active {
+    background-color: #17a2b8;
+    border-color: #138496;
+}
+
+.step.group-2 {
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+.step.group-2.active {
+    background-color: #dc3545;
+    border-color: #bd2130;
+}
+
+.step.group-3 {
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+
+.step.group-3.active {
+    background-color: #28a745;
+    border-color: #1e7e34;
+}
+
+.step:hover {
+    background-color: #e9ecef;
+    border-color: #adb5bd;
+}
+
+.step.active {
+    background-color: #007bff;
+    border-color: #0056b3;
+    color: white;
+    font-weight: bold;
+}
+
+.step.playing {
+    background-color: #ff6b6b !important;
+    border-color: #ff5252 !important;
+    transform: scale(1.1);
+}
+
+.pattern-list {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.pattern-list select {
+    width: 200px;
+    padding: 8px;
+    margin-right: 10px;
+}

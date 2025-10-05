@@ -1,0 +1,35 @@
+{% extends "study/base.html" %}
+
+{% block content %}
+<h2>Добавить занятие</h2>
+
+<form method="POST">
+    <div class="mb-3">
+        <label for="student_id" class="form-label">Ученик *</label>
+        <select class="form-select" id="student_id" name="student_id" required>
+            <option value="">Выберите ученика</option>
+            {% for student in students %}
+            <option value="{{ student['id'] }}">{{ student['name'] }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="subject" class="form-label">Предмет *</label>
+        <input type="text" class="form-control" id="subject" name="subject" required>
+    </div>
+    <div class="mb-3">
+        <label for="lesson_date" class="form-label">Дата *</label>
+        <input type="date" class="form-control" id="lesson_date" name="lesson_date" required>
+    </div>
+    <div class="mb-3">
+        <label for="duration" class="form-label">Длительность (минуты) *</label>
+        <input type="number" class="form-control" id="duration" name="duration" required>
+    </div>
+    <div class="mb-3">
+        <label for="price" class="form-label">Цена (₽) *</label>
+        <input type="number" step="0.01" class="form-control" id="price" name="price" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Добавить</button>
+    <a href="{{ url_for('study.lessons') }}" class="btn btn-secondary">Отмена</a>
+</form>
+{% endblock %}

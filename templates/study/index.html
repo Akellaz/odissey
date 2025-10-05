@@ -1,0 +1,38 @@
+{% extends "study/base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Ученики</h5>
+                <p class="card-text display-4">{{ students_count }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Занятия</h5>
+                <p class="card-text display-4">{{ lessons_count }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-info mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Прибыль</h5>
+                <p class="card-text display-4">{{ "%.2f"|format(total_revenue) }} ₽</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <h3>Быстрые действия</h3>
+        <a href="{{ url_for('study.add_student') }}" class="btn btn-primary">Добавить ученика</a>
+        <a href="{{ url_for('study.add_lesson') }}" class="btn btn-success">Добавить занятие</a>
+    </div>
+</div>
+{% endblock %}

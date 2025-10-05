@@ -8,7 +8,7 @@
 	</head>
 	<body>
 <div class="Main">
-<form action="{{ url_for('editBook',book_id = book.id)}}" method="post">
+<form action="{{ url_for('books.editBook', book_id=book.id) }}" method="post">
   <div class="form-group">
 <p>
     <label for="name">Название:</label>

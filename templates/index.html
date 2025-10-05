@@ -22,10 +22,10 @@
 								<ul>
 									<li>
 									
-									<a href="#"   class="button large icon solid fa-arrow-circle-right">
+									<a href="/game"   class="button large icon solid fa-arrow-circle-right">
 									
 								
-									
+									Тренажёр
 									
 									</a></li>
 									<li><a href="#" class="button alt large icon solid fa-question-circle"></a></li>
@@ -42,20 +42,25 @@
 							<div class="col-4 col-12-medium">
 
 								<!-- Box -->
-									<section class="box feature">
-										<a href="#" class="image featured"><img src="static/images/pic01.jpg" alt="" /></a>
-										
-										
-										
-										
-										
-										
+									<section class="box feature drum-box">
+										<div class="image featured drum-image">
+											
+											<div class="image-overlay">
+												<span class="activity-icon">🥁</span>
+											</div>
+										</div>
 										<div class="inner">
-											<header>
-												<h2>Put something here</h2>
-												<p>Maybe here as well I think</p>
+											<header class="feature-header">
+												<h2 class="feature-title">Барабанинг</h2>
+												<div class="title-underline"></div>
+												<p class="feature-subtitle">Ритм и энергия</p>
 											</header>
-											<p>Phasellus quam turpis, feugiat sit amet in, hendrerit in lectus. Praesent sed semper amet bibendum tristique fringilla.</p>
+											<p class="feature-description">Откройте для себя мир ритмов и музыки. Научитесь играть на барабанах под руководством профессионалов. Для всех уровней подготовки!</p>
+											<div class="feature-stats">
+												<span class="stat-item"><i class="fas fa-users"></i> Группы до 10 чел.</span>
+												<span class="stat-item"><i class="fas fa-clock"></i> 60 мин</span>
+											</div>
+											<a href="#" class="button primary fit">Записаться</a>
 										</div>
 									</section>
 
@@ -63,14 +68,25 @@
 							<div class="col-4 col-12-medium">
 
 								<!-- Box -->
-									<section class="box feature">
-										<a href="#" class="image featured"><img src="static/images/pic02.jpg" alt="" /></a>
+									<section class="box feature sup-box">
+										<div class="image featured sup-image">
+											
+											<div class="image-overlay">
+												<span class="activity-icon">🏄‍♂️</span>
+											</div>
+										</div>
 										<div class="inner">
-											<header>
-												<h2>An interesting title</h2>
-												<p>This is also an interesting subtitle</p>
+											<header class="feature-header">
+												<h2 class="feature-title">Сап-бординг</h2>
+												<div class="title-underline"></div>
+												<p class="feature-subtitle">Приключения на воде</p>
 											</header>
-											<p>Phasellus quam turpis, feugiat sit amet in, hendrerit in lectus. Praesent sed semper amet bibendum tristique fringilla.</p>
+											<p class="feature-description">Исследуйте водоемы с помощью сап-борда. Отдых на природе, улучшение баланса и физической формы. Безопасное обучение!</p>
+											<div class="feature-stats">
+												<span class="stat-item"><i class="fas fa-water"></i> На озере</span>
+												<span class="stat-item"><i class="fas fa-sun"></i> В любую погоду</span>
+											</div>
+											<a href="#" class="button primary fit">Забронировать</a>
 										</div>
 									</section>
 
@@ -78,14 +94,25 @@
 							<div class="col-4 col-12-medium">
 
 								<!-- Box -->
-									<section class="box feature">
-										<a href="#" class="image featured"><img src="static/images/pic03.jpg" alt="" /></a>
+									<section class="box feature padel-box">
+										<div class="image featured padel-image">
+											
+											<div class="image-overlay">
+												<span class="activity-icon">🎾</span>
+											</div>
+										</div>
 										<div class="inner">
-											<header>
-												<h2>Oh, and finally ...</h2>
-												<p>Here's another intriguing subtitle</p>
+											<header class="feature-header">
+												<h2 class="feature-title">Падел-теннис</h2>
+												<div class="title-underline"></div>
+												<p class="feature-subtitle">Скорость и драйв</p>
 											</header>
-											<p>Phasellus quam turpis, feugiat sit amet in, hendrerit in lectus. Praesent sed semper amet bibendum tristique fringilla.</p>
+											<p class="feature-description">Новый вид тенниса в закрытом помещении. Развитие реакции, скорости и координации. Игра вдвоем или вчетвером!</p>
+											<div class="feature-stats">
+												<span class="stat-item"><i class="fas fa-building"></i> Крытый корт</span>
+												<span class="stat-item"><i class="fas fa-trophy"></i> Для всех уровней</span>
+											</div>
+											<a href="#" class="button primary fit">Играть</a>
 										</div>
 									</section>
 
@@ -109,7 +136,7 @@
 													<div class="col-6"><a href="tintin.html" class="image fit"><img src="static/images/tintin/around-work-footer-img.png" alt="" /></a></div>
 													<div class="col-6"><a href="kroket.html" class="image fit"><img src="static/images/pic05.jpg" alt="" /></a></div>
 													<div class="col-6"><a href="syldavia.html" class="image fit"><img src="static/images/pic06.jpg" alt="" /></a></div>
-													<div class="col-6"><a href="#" class="image fit"><img src="static/images/pic07.jpg" alt="" /></a></div>
+													<div class="col-6"><a href="/study" class="image fit"><img src="static/images/pic07.jpg" alt="" /></a></div>
 												</div>
 											</div>
 											<a href="#" class="button icon fa-file-alt">More</a>
@@ -218,7 +245,6 @@
 			</div>
 
 		<!-- Scripts -->
-
 			<script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
 			<script src="{{ url_for('static', filename='js/jquery.dropotron.min.js') }}"></script>
 			<script src="{{ url_for('static', filename='js/browser.min.js') }}"></script>

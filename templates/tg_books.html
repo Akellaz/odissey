@@ -75,8 +75,8 @@
           <span>{{ book.time }} - {{ book.author }}</span>
           
           <!-- Кнопки справа -->
-          <a href="{{ url_for('editBook', book_id=book.id) }}" class="edit-icon"></a>
-          <a href="{{ url_for('deleteBook', book_id=book.id) }}" class="delete-icon"></a>
+          <a href="{{ url_for('books.editBook', book_id=book.id) }}" class="edit-icon"></a>
+          <a href="{{ url_for('books.deleteBook', book_id=book.id) }}" class="delete-icon"></a>
         </li>
       {% endfor %}
     </ul>

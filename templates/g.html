@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Изучаем длительности нот</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/drum-library.css') }}">
+    <style>
+	
+		
+		
+		
+        body { 
+            font-family: Arial, sans-serif; 
+            text-align: center; 
+            background-color: #f0f8ff;
+            margin: 0;
+            padding: 20px;
+        }
+        canvas { 
+            border: 2px solid #333; 
+            background-color: white;
+            margin: 20px auto;
+            display: block;
+        }
+        button { 
+            padding: 15px 25px; 
+            margin: 10px;
+            font-size: 18px; 
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #message {
+            font-size: 20px;
+            min-height: 30px;
+            margin: 15px;
+        }
+        .correct { color: green; font-weight: bold; }
+        .incorrect { color: red; font-weight: bold; }
+        h1 {
+            color: #333;
+        }
+        #controls {
+            margin: 20px;
+        }
+        #note-selector {
+            margin: 20px;
+        }
+        .note-group {
+            display: inline-block;
+            margin: 8px;
+            padding: 10px 12px;
+            border: 2px solid #333;
+            border-radius: 5px;
+            background-color: #e0e0e0;
+            cursor: pointer;
+            user-select: none;
+            font-size: 14px;
+        }
+        .note-group:hover {
+            background-color: #d0d0d0;
+        }
+        .note-group.selected {
+            background-color: #2196F3;
+            color: white;
+        }
+        #selector-controls {
+            margin: 10px;
+        }
+        #selector-controls button {
+            padding: 10px 15px;
+            margin: 5px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎵 Изучаем длительности нот 🎵</h1>
+    
+    <div id="note-selector">
+        <h3>Выберите группы нот:</h3>
+        <div class="note-group" onclick="toggleNoteType('quarter')">Четвертная</div>
+        <div class="note-group" onclick="toggleNoteType('eighth_pair')">Восьмые</div>
+        <div class="note-group" onclick="toggleNoteType('sixteenth_quartet')">Шестнадцатые</div>
+        <div class="note-group" onclick="toggleNoteType('sixteenth_pair_eighth')">2 шестнадцатых + восьмая</div>
+        <div class="note-group" onclick="toggleNoteType('eighth_sixteenth_pair')">Восьмая + две шестнадцатых</div>
+        <div class="note-group" onclick="toggleNoteType('sixteenth_eighth_sixteenth')">Шестнадцатая + восьмая + шестнадцатая</div>
+        
+    </div>
+        <div id="controls">
+        <button onclick="newQuestion()">Новый пример</button>
+    </div>
+    <canvas id="gameCanvas" width="800" height="300"></canvas>
+
+  
+ <div style="padding: 20px;">
+
+        
+        <div class="drum-container">
+		
+		 <div class="drum-grid" id="drumGrid"></div>
+            <div class="drum-controls">
+                <div class="control-group">
+                    <button onclick="playPattern()" id="playButton">Проиграть</button>
+                    <input type="range" id="bpm" min="40" max="240" value="60">
+                    <span>BPM: <span id="bpmValue">60</span></span>
+                </div>
+            </div>
+
+           
+            
+
+        </div>
+    </div>
+	 <div id="message"></div>
+    
+	<script src="{{ url_for('static', filename='js/game.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/drum-library-game.js') }}"></script>
+	 
+</body>
+</html>
