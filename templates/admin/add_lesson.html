@@ -1,0 +1,54 @@
+{% extends "admin/base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h1>Добавить занятие</h1>
+        
+        <div class="card mt-3">
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="student_id" class="form-label">Ученик *</label>
+                        <select class="form-control" id="student_id" name="student_id" required>
+                            <option value="">Выберите ученика</option>
+                            {% for student in students %}
+                            <option value="{{ student[0] }}">{{ student[1] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="subject" class="form-label">Предмет *</label>
+                        <input type="text" class="form-control" id="subject" name="subject" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="lesson_date" class="form-label">Дата *</label>
+                        <input type="date" class="form-control" id="lesson_date" name="lesson_date" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="duration" class="form-label">Длительность (минуты) *</label>
+                        <input type="number" class="form-control" id="duration" name="duration" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="price" class="form-label">Цена (руб) *</label>
+                        <input type="number" step="0.01" class="form-control" id="price" name="price" required>
+                    </div>
+                    
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Сохранить
+                        </button>
+                        <a href="{{ url_for('admin_routes.lessons') }}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Назад
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

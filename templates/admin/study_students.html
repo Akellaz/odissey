@@ -1,0 +1,45 @@
+{% extends 'admin/master.html' %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Ученики</h2>
+            <p>Всего учеников: {{ students_count }}</p>
+            
+            <div class="mb-3">
+                <a href="{{ url_for('study_admin.add_student') }}" class="btn btn-success">Добавить ученика</a>
+            </div>
+            
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Имя</th>
+                        <th>Email</th>
+                        <th>Телефон</th>
+                        <th>Дата создания</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                    <tr>
+                        <td>{{ student[0] }}</td>
+                        <td>{{ student[1] }}</td>
+                        <td>{{ student[2] or '-' }}</td>
+                        <td>{{ student[3] or '-' }}</td>
+                        <td>{{ student[4] }}</td>
+                        <td>
+                            <a href="{{ url_for('study_admin.delete_student', student_id=student[0]) }}" 
+                               class="btn btn-danger btn-sm"
+                               onclick="return confirm('Вы уверены?')">Удалить</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

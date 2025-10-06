@@ -1,0 +1,117 @@
+{% extends "admin/base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h1>Дашборд</h1>
+        <p class="text-muted">Добро пожаловать в панель управления</p>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-3">
+        <div class="card border-primary">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-8">
+                        <h5 class="card-title">Ученики</h5>
+                        <p class="card-text display-4">{{ students_count }}</p>
+                    </div>
+                    <div class="col-4 text-center">
+                        <i class="fas fa-user-graduate fa-3x text-primary"></i>
+                    </div>
+                </div>
+                <a href="{{ url_for('admin_routes.students') }}" class="btn btn-primary">Управление</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card border-success">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-8">
+                        <h5 class="card-title">Занятия</h5>
+                        <p class="card-text display-4">{{ lessons_count }}</p>
+                    </div>
+                    <div class="col-4 text-center">
+                        <i class="fas fa-book fa-3x text-success"></i>
+                    </div>
+                </div>
+                <a href="{{ url_for('admin_routes.lessons') }}" class="btn btn-success">Управление</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card border-info">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-8">
+                        <h5 class="card-title">Бронирования</h5>
+                        <p class="card-text display-4">{{ bookings_count }}</p>
+                    </div>
+                    <div class="col-4 text-center">
+                        <i class="fas fa-calendar-check fa-3x text-info"></i>
+                    </div>
+                </div>
+                <a href="{{ url_for('admin_routes.bookings') }}" class="btn btn-info">Управление</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card border-warning">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-8">
+                        <h5 class="card-title">Финансы</h5>
+                        <p class="card-text display-4">{{ "%.0f"|format(total_revenue or 0) }}</p>
+                    </div>
+                    <div class="col-4 text-center">
+                        <i class="fas fa-ruble-sign fa-3x text-warning"></i>
+                    </div>
+                </div>
+                <a href="{{ url_for('admin_routes.finance') }}" class="btn btn-warning">Подробно</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- График прибыли по месяцам (для дашборда) -->
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-chart-bar"></i> Прибыль по последним месяцам
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Месяц</th>
+                                <th>Прибыль</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for month_data in monthly_revenue[:5] %}
+                            <tr>
+                                <td>{{ month_data.month }}</td>
+                                <td>{{ "%.2f"|format(month_data.revenue) }} руб</td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="2" class="text-center">Нет данных</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'admin/master.html' %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Учебный сервис - Обзор</h2>
+            
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Ученики</h5>
+                            <p class="card-text display-4">{{ students_count }}</p>
+                            <a href="{{ url_for('admin.students') }}" class="btn btn-primary">Управление учениками</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Занятия</h5>
+                            <p class="card-text display-4">{{ lessons_count }}</p>
+                            <a href="{{ url_for('admin.lessons') }}" class="btn btn-primary">Управление занятиями</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

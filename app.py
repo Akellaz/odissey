@@ -8,7 +8,7 @@ def create_app():
     UPLOAD_FOLDER = 'uploads'
     app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
     app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
-    app.secret_key = 'your-secret-key-here'
+    app.secret_key = 'your-secret-key-here-change-this-in-production'
     
     # Регистрация blueprint'ов
     from routes.main import main_bp
@@ -16,14 +16,16 @@ def create_app():
     from routes.sup import sup_bp
     from routes.books import books_bp
     from routes.games import games_bp
-    from routes.study import study_bp  # Добавляем новый blueprint
+    from routes.study import study_bp
+    from routes.admin import admin_bp  # Упрощенное имя
     
     app.register_blueprint(main_bp)
     app.register_blueprint(music_bp)
     app.register_blueprint(sup_bp)
     app.register_blueprint(books_bp)
     app.register_blueprint(games_bp)
-    app.register_blueprint(study_bp)  # Регистрируем blueprint
+    app.register_blueprint(study_bp)
+    app.register_blueprint(admin_bp)  # Регистрируем админ blueprint
     
     return app
 

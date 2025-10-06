@@ -1,0 +1,43 @@
+{% extends 'admin/master.html' %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Занятия</h2>
+            <p>Всего занятий: {{ lessons_count }}</p>
+            
+            <div class="mb-3">
+                <a href="{{ url_for('lessons_admin.add_lesson') }}" class="btn btn-success">Добавить занятие</a>
+            </div>
+            
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Ученик</th>
+                        <th>Предмет</th>
+                        <th>Дата</th>
+                        <th>Длительность (мин)</th>
+                        <th>Цена</th>
+                        <th>Дата создания</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for lesson in lessons %}
+                    <tr>
+                        <td>{{ lesson[0] }}</td>
+                        <td>{{ lesson[6] }}</td>
+                        <td>{{ lesson[3] }}</td>
+                        <td>{{ lesson[4] }}</td>
+                        <td>{{ lesson[5] }}</td>
+                        <td>{{ lesson[6] }}</td>
+                        <td>{{ lesson[7] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
