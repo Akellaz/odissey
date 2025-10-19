@@ -1,0 +1,44 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #f9f9f9;
+    padding: 20px;
+}
+
+.staff {
+    position: relative;
+    margin-bottom: 30px;
+    height: 200px;
+    border-bottom: 1px solid #000;
+}
+
+.line {
+    height: 2px;
+    background: black;
+    margin: 20px 0;
+    width: 100%;
+}
+
+.track {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+    margin-bottom: 20px;
+    width: 660px;
+}
+
+.track div {
+    width: 30px;
+    height: 30px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.track div:nth-child(4n) {
+    border-right: 3px solid #000;
+}
+
+.track div.selected {
+    background-color: #4CAF50;
+}

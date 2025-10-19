@@ -1,18 +1,18 @@
 /* --------------------------------------------------------------
-   Drum Sequencer – полная версия с локальными звуками (WAV)
+   Drum Sequencer – полная версия с локальными звуками (WAV) и отображением нот
    --------------------------------------------------------------*/
 
 class DrumSequencer {
     constructor() {
         /* ---------- Настройки ---------- */
-        this.tracks = ['hihat', 'snare', 'kick', 'openhat', 'tom1', 'tom2']; // названия дорожек
+        this.tracks = ['hihat', 'snare', 'kick', 'tom3', 'tom1']; // убран tom2
         this.steps  = 16;                     // количество шагов (16‑16‑th нот)
         this.bpm    = 120;                    // начальное BPM
 
         /* ---------- Состояние ---------- */
         this.pattern       = {};               // объект pattern[track][step] = 0/1
         this.isPlaying     = false;            // сейчас играет?
-        this.currentStep   = 0;                // текущий шаг во время воспроизведения
+        this.currentStep   = 0;                 // текущий шаг во время воспроизведения
         this.intervalId    = null;             // ID setInterval
         this.audioContext  = null;             // Web Audio API context
         this.samples       = {};               // загруженные AudioBuffer‑ы
@@ -22,10 +22,6 @@ class DrumSequencer {
         this.initPattern();       // пустой паттерн
         this.renderGrid();        // визуальная сетка
         this.setupEventListeners();
-        this.refreshPatternList(); // список сохранённых паттернов
-
-        // сразу начинаем загрузку звуков (можно вызвать вручную, если хотите)
-        this.initAudio();
     }
 
     /* ------------------------------------------------------------------------
@@ -44,9 +40,8 @@ class DrumSequencer {
                 kick:    '/static/sounds/kick.wav',
                 snare:   '/static/sounds/snare.wav',
                 hihat:   '/static/sounds/hihat.wav',
-                openhat: '/static/sounds/openhat.wav',
-                tom1:    '/static/sounds/tom1.wav',
-                tom2:    '/static/sounds/tom2.wav'
+                tom3:    '/static/sounds/openhat.wav',
+                tom1:    '/static/sounds/tom1.wav'
             };
 
             console.log('Загрузка звуковых сэмплов...');
@@ -130,7 +125,7 @@ class DrumSequencer {
 
             this.pattern[track].forEach((v, i) => {
                 const stepDiv = document.createElement('div');
-                stepDiv.className = `step ${v ? 'active' : ''}`;
+                stepDiv.className = `step ${v ? 'active' : ''} group-${Math.floor(i/4)}`;
                 stepDiv.dataset.track = track;
                 stepDiv.dataset.step = i;
                 stepDiv.textContent = v ? '●' : '';
@@ -146,6 +141,92 @@ class DrumSequencer {
     toggleStep(track, step) {
         this.pattern[track][step] = this.pattern[track][step] ? 0 : 1;
         this.renderGrid();
+        this.renderNotes(); // Обновляем нотный стан при каждом изменении
+    }
+
+    /* ------------------------------------------------------------------------
+       NOTES – отображение нот на нотном стане
+       ------------------------------------------------------------------------ */
+    renderNotes() {
+        const notesContainer = document.getElementById('notesContainer');
+        if (!notesContainer) return;
+
+        // Очищаем контейнер
+        notesContainer.innerHTML = '';
+
+        // Создаем нотный стан
+        const staffContainer = document.createElement('div');
+        staffContainer.className = 'staff-container';
+        staffContainer.innerHTML = `
+            <div class="staff-header">
+                <h3>Нотный стан</h3>
+                <button onclick="window.drumSequencer.clearPattern()">Очистить</button>
+            </div>
+            <div class="staff" id="staff">
+                ${this.renderStaffLines()}
+            </div>
+        `;
+
+        notesContainer.appendChild(staffContainer);
+
+        // Рендерим ноты
+        this.renderNotesOnStaff();
+    }
+
+    renderStaffLines() {
+        // Создаем 5 линий нотного стана как в примере
+        let staffHTML = '';
+        for (let i = 0; i < 5; i++) {
+            staffHTML += `<div class="staff-line"></div>`;
+        }
+        return staffHTML;
+    }
+
+    renderNotesOnStaff() {
+        const staff = document.getElementById('staff');
+        if (!staff) return;
+
+        // Очищаем существующие ноты
+        const existingNotes = staff.querySelectorAll('.note, .hihat-note');
+        existingNotes.forEach(note => note.remove());
+
+        // Маппинг барабанов на позиции нот (на третьей линии как в примере)
+        const trackToPosition = {
+            'hihat': 60,    // над третьей линией
+            'snare': 40,    // на третьей линии
+            'kick': 20,     // под третьей линией
+            'tom3': 30,     // между второй и третьей
+            'tom1': 50      // между третьей и четвертой
+        };
+
+        // Создаем ноты для каждого шага
+        for (let step = 0; step < this.steps; step++) {
+            this.tracks.forEach(track => {
+                if (this.pattern[track][step]) {
+                    if (track === 'hihat') {
+                        // Для hihat создаем крестик
+                        const hihatNote = document.createElement('div');
+                        hihatNote.className = 'hihat-note';
+                        hihatNote.dataset.track = track;
+                        hihatNote.dataset.step = step;
+                        hihatNote.style.left = `${(step * 40) + 20}px`;
+                        hihatNote.style.bottom = `${trackToPosition[track]}%`;
+                        hihatNote.title = `${track} на шаге ${step + 1}`;
+                        staff.appendChild(hihatNote);
+                    } else {
+                        // Для остальных создаем обычные ноты
+                        const note = document.createElement('div');
+                        note.className = 'note';
+                        note.dataset.track = track;
+                        note.dataset.step = step;
+                        note.style.left = `${(step * 40) + 20}px`;
+                        note.style.bottom = `${trackToPosition[track]}%`;
+                        note.title = `${track} на шаге ${step + 1}`;
+                        staff.appendChild(note);
+                    }
+                }
+            });
+        }
     }
 
     /* ------------------------------------------------------------------------
@@ -197,119 +278,35 @@ class DrumSequencer {
         this.clearHighlights();
         const cells = document.querySelectorAll(`.step[data-step="${step}"]`);
         cells.forEach(c => c.classList.add('playing'));
+        // Подсвечиваем соответствующие ноты на нотном стане
+        this.highlightNotes(step);
+    }
+
+    highlightNotes(step) {
+        const notes = document.querySelectorAll('.note, .hihat-note');
+        notes.forEach(note => {
+            const noteStep = parseInt(note.dataset.step);
+            if (noteStep === step) {
+                note.classList.add('playing');
+            } else {
+                note.classList.remove('playing');
+            }
+        });
     }
 
     clearHighlights() {
         const cells = document.querySelectorAll('.step.playing');
         cells.forEach(c => c.classList.remove('playing'));
+        
+        const notes = document.querySelectorAll('.note.playing, .hihat-note.playing');
+        notes.forEach(n => n.classList.remove('playing'));
     }
 
     clearPattern() {
         this.initPattern();
         this.renderGrid();
         this.stopPattern();
-    }
-
-    /* ------------------------------------------------------------------------
-       STORAGE – API‑запросы для сохранения/загрузки паттернов
-       ------------------------------------------------------------------------ */
-    async savePattern() {
-        const name = document.getElementById('patternName').value || 'default';
-        try {
-            const resp = await fetch(`/api/drum/pattern/${name}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(this.pattern)
-            });
-
-            if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-
-            const data = await resp.json();
-            if (data.status === 'saved') {
-                alert('Паттерн сохранён');
-                this.refreshPatternList();
-            } else {
-                throw new Error(data.error || 'Неизвестная ошибка');
-            }
-        } catch (e) {
-            console.error('Ошибка сохранения:', e);
-            alert('Не удалось сохранить паттерн');
-        }
-    }
-
-    async loadPattern() {
-        const name = document.getElementById('patternName').value || 'default';
-        try {
-            const resp = await fetch(`/api/drum/pattern/${name}`);
-            if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-
-            this.pattern = await resp.json();
-            this.renderGrid();
-            alert('Паттерн загружен');
-        } catch (e) {
-            console.error('Ошибка загрузки:', e);
-            alert('Не удалось загрузить паттерн');
-        }
-    }
-
-    async deletePattern() {
-        const name = document.getElementById('patternName').value || 'default';
-        if (!confirm(`Удалить паттерн "${name}"?`)) return;
-
-        try {
-            const resp = await fetch(`/api/drum/pattern/${name}`, {
-                method: 'DELETE'
-            });
-            if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-
-            const data = await resp.json();
-            if (data.status === 'deleted') {
-                alert('Паттерн удалён');
-                this.refreshPatternList();
-            } else {
-                throw new Error(data.error);
-            }
-        } catch (e) {
-            console.error('Ошибка удаления:', e);
-            alert('Не удалось удалить паттерн');
-        }
-    }
-
-    async refreshPatternList() {
-        try {
-            const resp = await fetch('/api/drum/patterns');
-            if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-
-            const patterns = await resp.json();
-
-            const sel = document.getElementById('patternSelect');
-            sel.innerHTML = '<option value="">Выберите паттерн…</option>';
-            patterns.forEach(p => {
-                const opt = document.createElement('option');
-                opt.value = p;
-                opt.textContent = p;
-                sel.appendChild(opt);
-            });
-        } catch (e) {
-            console.error('Ошибка получения списка паттернов:', e);
-        }
-    }
-
-    async loadSelectedPattern() {
-        const sel = document.getElementById('patternSelect');
-        const name = sel.value;
-        if (!name) return;
-        document.getElementById('patternName').value = name;
-
-        try {
-            const resp = await fetch(`/api/drum/pattern/${name}`);
-            if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-
-            this.pattern = await resp.json();
-            this.renderGrid();
-        } catch (e) {
-            console.error('Ошибка загрузки выбранного паттерна:', e);
-        }
+        this.renderNotes(); // Обновляем нотный стан
     }
 
     /* ------------------------------------------------------------------------
@@ -345,10 +342,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /* Глобальные функции, которые вызываются из HTML */
     window.playPattern          = () => drumSequencer.playPattern();
-    window.savePattern          = () => drumSequencer.savePattern();
-    window.loadPattern          = () => drumSequencer.loadPattern();
-    window.deletePattern        = () => drumSequencer.deletePattern();
     window.clearPattern        = () => drumSequencer.clearPattern();
-    window.refreshPatternList  = () => drumSequencer.refreshPatternList();
-    window.loadSelectedPattern = () => drumSequencer.loadSelectedPattern();
+    
+    // Инициализируем отображение нот
+    setTimeout(() => {
+        if (window.drumSequencer) {
+            window.drumSequencer.renderNotes();
+        }
+    }, 100);
 });

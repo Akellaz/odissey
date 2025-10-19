@@ -1,0 +1,322 @@
+Структура папок тома Windows 11
+Серийный номер тома: 6E07-8104
+C:.
+|   ak_bot.py
+|   ak_data.db
+|   app.py
+|   database_setup.py
+|   fullchain.pem
+|   privkey.pem
+|   routes.db
+|   study.db
+|   __init__.py
+|   структура.txt
+|   
++---app_win
+|       html5up-verti.zip
+|       
++---assistant
+|   |   context.py
+|   |   core.py
+|   |   routes.py
+|   |   __init__.py
+|   |   
+|   \---__pycache__
+|           context.cpython-39.pyc
+|           core.cpython-39.pyc
+|           routes.cpython-39.pyc
+|           __init__.cpython-39.pyc
+|           
++---cache
++---data
+|       context_music_project.json
+|       
++---models
+|       book.py
+|       __init__.py
+|       
++---routes
+|   |   admin.py
+|   |   books.py
+|   |   main.py
+|   |   music.py
+|   |   study.py
+|   |   sup.py
+|   |   __init__.py
+|   |   
+|   \---__pycache__
+|           admin.cpython-39.pyc
+|           books.cpython-39.pyc
+|           games.cpython-39.pyc
+|           main.cpython-39.pyc
+|           music.cpython-39.pyc
+|           study.cpython-39.pyc
+|           sup.cpython-39.pyc
+|           __init__.cpython-39.pyc
+|           
++---static
+|   |   5MY6SAMpaOwCzMiG1sxvwjBgPreKnxtVIVYqV3HGoFs
+|   |   Chвteau de Moulinsart.mp4
+|   |   favi.ico
+|   |   favicon.ico
+|   |   foo.png
+|   |   
+|   +---css
+|   |   |   drum-library.css
+|   |   |   fontawesome-all.min.css
+|   |   |   main.css
+|   |   |   rhythm_generator.css
+|   |   |   tg_main.css
+|   |   |   
+|   |   \---images
+|   |           bg01.png
+|   |           
+|   +---files
+|   |       drumz.exe
+|   |       
+|   +---images
+|   |   |   drum.png
+|   |   |   mos.png
+|   |   |   padl.jpg
+|   |   |   pic01.jpg
+|   |   |   pic02.jpg
+|   |   |   pic03.jpg
+|   |   |   pic04.jpg
+|   |   |   pic05.jpg
+|   |   |   pic06.jpg
+|   |   |   pic07.jpg
+|   |   |   sup.jpg
+|   |   |   
+|   |   +---favicon_io
+|   |   |       favicon.ico
+|   |   |       
+|   |   \---tintin
+|   |           3g7inrug0n103ui90mejthg7cf-0aa4f2a3486b2c269a7eb63abac6828e.png
+|   |           5beda8bdab329-9cb8db019b97dd77d1325bf2762a317e.png
+|   |           9atap6a8lg6hmoobgoencmfbq2-a0799ac3b5e9fb25e5780a03ec71de2d.png
+|   |           alphart-color.png
+|   |           america-color.png
+|   |           around-work-footer-img.png
+|   |           art-the-blue-lotus-the-adventures-of-tintin-tintin-in-tibet-chang-chong-chen-tribute-20606995a948b2ef7ce9efe5ebf00821.png
+|   |           blackisland-color.png
+|   |           bluelotus-color.png
+|   |           brokenear-color.png
+|   |           calculusaffair-color.png
+|   |           castafioreemrald-color.png
+|   |           cigars-of-the-pharaoh-the-adventures-of-tintin-king-ottokar-s-sceptre-land-of-black-gold-tintin-in-the-congo-inscription-0136113b6fd3f7859c6444f29b9f8e48.png
+|   |           cigarsofthepharaoh-color.png
+|   |           clipart-tintin-2.jpg
+|   |           clipart-tintin-4.jpg
+|   |           clipart-tintin-5.png
+|   |           clipart-tintin-6.jpg
+|   |           clipart-tintin-7.jpg
+|   |           clipart-tintin-8.jpg
+|   |           clipart-tintin.jpg
+|   |           computer-icons-adventure-film-the-adventures-of-tintin-the-secret-of-the-unicorn-others-ac2ff62c09f7a842521c7ae82672beaf.png
+|   |           congo-color.png
+|   |           crabwiththegoldenclaws-color.png
+|   |           destination-moon-tintin-in-tibet-red-rackham-s-treasure-tintin-in-the-congo-the-red-sea-sharks-planche-a014c09584a76e7b89d4275cd1a9cc4d.png
+|   |           destinationmoon-color.png
+|   |           explorersonthemoon-color.png
+|   |           flight714-color.png
+|   |           fon2 (1).jpg
+|   |           fon2.jpg
+|   |           herb.png
+|   |           i2cmq9l0sc234go5671b33c3na-52b9139090b629435f2809b6dc1a2bc4.png
+|   |           kingottokarssceptre-color.png
+|   |           landofblackgold-color.png
+|   |           landofthesoviets-color.png
+|   |           milou.png
+|   |           oom6nhlue5e53mi7inbjdmjhp3-20158a73e2b80d8ab14d3ff38d51cb17.png
+|   |           picaros-color.png
+|   |           prisonersofthesun-color.png
+|   |           red-rackhams-treasure-king-ottokars-sceptre-the-adventures-of-tintin-illustration-whale-1ca0b4b5643cf72e975804aec6878388.png
+|   |           redrackhamstreasure-color.png
+|   |           redseasharks-color.png
+|   |           secretoftheunicorn-color.png
+|   |           sevencrystalballs-color.png
+|   |           shootingstar-color.png
+|   |           Text Document.txt
+|   |           the-adventures-of-tintin-le-musee-imaginaire-de-tintin-greeting-note-cards-marlinspike-hall-poster-greetings-d1477de8db79254ecfb8cb63aa648502.png
+|   |           tibet-color.png
+|   |           tintin-clipart-13.jpg
+|   |           tintin-clipart-2.jpg
+|   |           tintin-clipart-4 (1).jpg
+|   |           tintin-clipart-4.jpg
+|   |           tintin-clipart-7.jpg
+|   |           tintin-drawing-1.jpg
+|   |           tintin-drawing-11.jpg
+|   |           tintin-drawing-12.jpg
+|   |           tintin-drawing-12.png
+|   |           tintin-drawing-16.jpg
+|   |           tintin-drawing-18.jpg
+|   |           tintin-drawing-23.jpg
+|   |           tintin-drawing-30.jpg
+|   |           tintin_logo2.jpg
+|   |           u34jvd26se7l28cgi20evu6rns-c2966b94ee7f3c541ff6af5c1816b8ab.png
+|   |           ul75426bdoceo767lmsk9uq0fs.png
+|   |           white.gif
+|   |           
+|   +---js
+|   |       breakpoints.min.js
+|   |       browser.min.js
+|   |       drum-library-game.js
+|   |       drum-library.js
+|   |       game.js
+|   |       jquery.dropotron.min.js
+|   |       jquery.min.js
+|   |       main.js
+|   |       rhythm_generator.js
+|   |       util.js
+|   |       vexflow-min.js
+|   |       
+|   +---json
+|   |       activity_20290582298.json
+|   |       
+|   +---kroket
+|   |       pole.png
+|   |       
+|   +---sass
+|   |   |   main.scss
+|   |   |   
+|   |   \---libs
+|   |           _breakpoints.scss
+|   |           _functions.scss
+|   |           _html-grid.scss
+|   |           _mixins.scss
+|   |           _vars.scss
+|   |           _vendor.scss
+|   |           
+|   +---shop
+|   |       fanatic1.jpg
+|   |       fanatic2.jpg
+|   |       fanatic3.jpg
+|   |       fanatic4.png
+|   |       
+|   +---sounds
+|   |       hihat.wav
+|   |       kick.wav
+|   |       openhat.wav
+|   |       ride.wav
+|   |       snare.wav
+|   |       tom1.wav
+|   |       tom2.wav
+|   |       _snare.wav
+|   |       
+|   \---webfonts
+|           fa-brands-400.eot
+|           fa-brands-400.svg
+|           fa-brands-400.ttf
+|           fa-brands-400.woff
+|           fa-brands-400.woff2
+|           fa-regular-400.eot
+|           fa-regular-400.svg
+|           fa-regular-400.ttf
+|           fa-regular-400.woff
+|           fa-regular-400.woff2
+|           fa-solid-900.eot
+|           fa-solid-900.svg
+|           fa-solid-900.ttf
+|           fa-solid-900.woff
+|           fa-solid-900.woff2
+|           
++---templates
+|   |   1.txt
+|   |   5MY6SAMpaOwCzMiG1sxvwjBgPreKnxtVIVYqV3HGoFs.html
+|   |   books.html
+|   |   deleteBook.html
+|   |   editBook.html
+|   |   inclusio.html
+|   |   index.html
+|   |   kroket.html
+|   |   music — копия.html
+|   |   music.html
+|   |   mus_analize.html
+|   |   newBook.html
+|   |   no-sidebar.html
+|   |   right-sidebar.html
+|   |   syldavia.html
+|   |   tg_books.html
+|   |   tg_deleteBook.html
+|   |   tg_editBook.html
+|   |   tg_newBook.html
+|   |   tintin.html
+|   |   
+|   +---admin
+|   |       add_lesson.html
+|   |       add_student.html
+|   |       base.html
+|   |       bookings.html
+|   |       dashboard.html
+|   |       error.html
+|   |       finance.html
+|   |       index.html
+|   |       lessons.html
+|   |       login.html
+|   |       master.html
+|   |       routes.html
+|   |       students.html
+|   |       study_lessons.html
+|   |       study_overview.html
+|   |       study_students.html
+|   |       
+|   +---includes
+|   |       admin_panel.html
+|   |       head.html
+|   |       header.html
+|   |       login_adm.html
+|   |       music-menu.html
+|   |       sup-menu.html
+|   |       
+|   +---music
+|   |       drum.html
+|   |       drum_book.html
+|   |       g.html
+|   |       rhythm_generator.html
+|   |       seq+.html
+|   |       seq.html
+|   |       seq1.html
+|   |       
+|   +---study
+|   |       add_lesson.html
+|   |       add_student.html
+|   |       base.html
+|   |       finance.html
+|   |       index.html
+|   |       lessons.html
+|   |       students.html
+|   |       
+|   \---sup
+|           desna.html
+|           istra.html
+|           moscow.html
+|           nerskaya.html
+|           oka.html
+|           sup.html
+|           sup_map.html
+|           
++---uploads
+|       1.json
+|       2.json
+|       3.json
+|       4.json
+|       5MY6SAMpaOwCzMiG1sxvwjBgPreKnxtVIVYqV3HGoFs
+|       activity_20227190525.json
+|       activity_20290582298.json
+|       compress_mp3cut.net.wav
+|       
++---utils
+|   |   audio_processor.py
+|   |   gpx_converter.py
+|   |   water_temperature.py
+|   |   __init__.py
+|   |   
+|   \---__pycache__
+|           water_temperature.cpython-39.pyc
+|           __init__.cpython-39.pyc
+|           
+\---__pycache__
+        app.cpython-39.pyc
+        database_setup.cpython-39.pyc
+        tg_admin.cpython-39.pyc
+        

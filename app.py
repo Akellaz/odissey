@@ -1,5 +1,4 @@
 from flask import Flask
-import os
 
 def create_app():
     app = Flask(__name__)
@@ -15,17 +14,19 @@ def create_app():
     from routes.music import music_bp
     from routes.sup import sup_bp
     from routes.books import books_bp
-    from routes.games import games_bp
     from routes.study import study_bp
-    from routes.admin import admin_bp  # Упрощенное имя
+    from routes.admin import admin_bp
+    
+    # Новый blueprint для ассистента
+    from assistant.routes import assistant_bp
     
     app.register_blueprint(main_bp)
     app.register_blueprint(music_bp)
     app.register_blueprint(sup_bp)
     app.register_blueprint(books_bp)
-    app.register_blueprint(games_bp)
     app.register_blueprint(study_bp)
-    app.register_blueprint(admin_bp)  # Регистрируем админ blueprint
+    app.register_blueprint(admin_bp)
+    app.register_blueprint(assistant_bp)  # Регистрируем ассистент
     
     return app
 

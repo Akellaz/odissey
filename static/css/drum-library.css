@@ -139,10 +139,185 @@
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    display: none; /* Скрыто, так как работа с паттернами убрана */
 }
 
 .pattern-list select {
     width: 200px;
     padding: 8px;
     margin-right: 10px;
+}
+
+/* Стили для нотного стана из примера */
+.staff-container {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 20px;
+    margin-top: 20px;
+    position: relative;
+}
+
+.staff-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.staff-header h3 {
+    margin: 0;
+    color: #333;
+}
+
+.staff {
+    position: relative;
+    height: 250px;
+    background: 
+        linear-gradient(to bottom,
+            transparent 0%,
+            #333 0%,
+            #333 2%,
+            transparent 2%,
+            transparent 19%,
+            #333 19%,
+            #333 21%,
+            transparent 21%,
+            transparent 39%,
+            #333 39%,
+            #333 41%,
+            transparent 41%,
+            transparent 59%,
+            #333 59%,
+            #333 61%,
+            transparent 61%,
+            transparent 79%,
+            #333 79%,
+            #333 81%,
+            transparent 81%
+        );
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin: 20px 0;
+}
+
+.staff-line {
+    position: absolute;
+    width: 100%;
+    height: 1px;
+    background-color: #333;
+}
+
+.staff-line:nth-child(1) { top: 20%; }
+.staff-line:nth-child(2) { top: 40%; }
+.staff-line:nth-child(3) { top: 60%; }
+.staff-line:nth-child(4) { top: 80%; }
+.staff-line:nth-child(5) { top: 100%; }
+
+.note {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: #000;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    transform: translateX(-50%);
+    z-index: 10;
+}
+
+.note:hover {
+    transform: translateX(-50%) scale(1.1);
+}
+
+.note.playing {
+    background-color: #ff0000 !important;
+    transform: translateX(-50%) scale(1.2);
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+}
+
+/* Крестики для hihat */
+.hihat-note {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    transform: translateX(-50%);
+    z-index: 10;
+}
+
+.hihat-note::before,
+.hihat-note::after {
+    content: '';
+    position: absolute;
+    background-color: #000;
+    border-radius: 2px;
+}
+
+.hihat-note::before {
+    width: 3px;
+    height: 20px;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+}
+
+.hihat-note::after {
+    width: 3px;
+    height: 20px;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%) rotate(-45deg);
+}
+
+.hihat-note:hover {
+    transform: translateX(-50%) scale(1.1);
+}
+
+.hihat-note.playing::before,
+.hihat-note.playing::after {
+    background-color: #ff0000 !important;
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+}
+
+.hihat-note.playing {
+    transform: translateX(-50%) scale(1.2);
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .drum-container {
+        padding: 10px;
+    }
+    
+    .track-name {
+        width: 80px;
+        padding: 10px;
+        font-size: 12px;
+    }
+    
+    .step {
+        width: 30px;
+        height: 30px;
+        font-size: 12px;
+    }
+    
+    .staff {
+        height: 200px;
+    }
+    
+    .note,
+    .hihat-note {
+        width: 15px;
+        height: 15px;
+    }
+    
+    .hihat-note::before,
+    .hihat-note::after {
+        height: 15px;
+        width: 2px;
+    }
 }

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Генератор ритмических рисунков</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/rhythm_generator.css') }}">
+
+</head>
+<body>
+    <h1>Ритмический рисунок ударной установки</h1>
+
+    <!-- Нотный стан -->
+    <div class="staff">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <canvas id="notationCanvas" width="800" height="200"></canvas>
+    </div>
+
+    <!-- Дорожки -->
+    <div class="tracks">
+        <h3>Hi-Hat</h3>
+        <div class="track" id="hihat"></div>
+
+        <h3>Snare</h3>
+        <div class="track" id="snare"></div>
+
+        <h3>Kick</h3>
+        <div class="track" id="kick"></div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/rhythm_generator.js') }}"></script>
+</body>
+</html>

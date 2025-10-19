@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Изучаем длительности нот</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            text-align: center; 
+            background: linear-gradient(135deg, #f0f8ff 0%, #e6f7ff 100%);
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+        
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+        
+        .app-description {
+            max-width: 800px;
+            margin: 0 auto 20px;
+            padding: 15px;
+            background: #e3f2fd;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        button { 
+            padding: 15px 25px; 
+            font-size: 18px; 
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            font-weight: 600;
+        }
+        
+        button:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        #message {
+            font-size: 20px;
+            min-height: 30px;
+            margin: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+        
+        .correct { 
+            color: #27ae60; 
+            background-color: rgba(39, 174, 96, 0.1);
+            border: 2px solid #27ae60;
+        }
+        
+        .incorrect { 
+            color: #e74c3c; 
+            background-color: rgba(231, 76, 60, 0.1);
+            border: 2px solid #e74c3c;
+        }
+        
+        canvas { 
+            border: 3px solid #3498db; 
+            background-color: white;
+            margin: 20px auto;
+            display: block;
+            border-radius: 8px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+        
+        .note-selector {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+            max-width: 900px;
+        }
+        
+        .note-selector h2 {
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        
+        .note-types {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .note-type {
+            padding: 12px 20px;
+            background: #e3f2fd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+            font-weight: 500;
+        }
+        
+        .note-type:hover {
+            background: #bbdefb;
+            transform: translateY(-2px);
+        }
+        
+        .note-type.selected {
+            background: #3498db;
+            color: white;
+            border-color: #1d6fa5;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Стили для барабанного секвенсора */
+        .drum-container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+        
+        .drum-controls {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .control-group {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+        }
+        
+        .control-group input, 
+        .control-group button, 
+        .control-group select {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        .drum-grid {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        
+        .track-row {
+            display: flex;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .track-row:last-child {
+            border-bottom: none;
+        }
+        
+        .track-name {
+            width: 120px;
+            padding: 15px;
+            font-weight: bold;
+            background: #f8f9fa;
+            text-align: right;
+            border-right: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+        
+        .track-steps {
+            display: flex;
+            flex: 1;
+            padding: 5px;
+        }
+        
+        .step {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #ddd;
+            margin: 2px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .step.group-0 {
+            background-color: #fff3cd;
+            border-color: #ffeaa7;
+        }
+        
+        .step.group-0.active {
+            background-color: #ffc107;
+            border-color: #e0a800;
+        }
+        
+        .step.group-1 {
+            background-color: #d1ecf1;
+            border-color: #b8daff;
+        }
+        
+        .step.group-1.active {
+            background-color: #17a2b8;
+            border-color: #138496;
+            color: white;
+        }
+        
+        .step.group-2 {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
+        
+        .step.group-2.active {
+            background-color: #dc3545;
+            border-color: #bd2130;
+            color: white;
+        }
+        
+        .step.group-3 {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+        
+        .step.group-3.active {
+            background-color: #28a745;
+            border-color: #1e7e34;
+            color: white;
+        }
+        
+        .step:hover {
+            background-color: #e9ecef;
+            border-color: #adb5bd;
+            transform: scale(1.1);
+        }
+        
+        .step.active {
+            background-color: #007bff;
+            border-color: #0056b3;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .step.playing {
+            background-color: #ff6b6b !important;
+            border-color: #ff5252 !important;
+            transform: scale(1.1);
+            box-shadow: 0 0 10px rgba(255, 107, 107, 0.7);
+        }
+        
+        .instructions {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 30px auto;
+            max-width: 900px;
+            text-align: left;
+        }
+        
+        .instructions h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .instructions strong {
+            color: #e74c3c;
+        }
+        
+        footer {
+            margin-top: 30px;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .track-name {
+                width: 80px;
+                padding: 10px;
+                font-size: 12px;
+            }
+            
+            .step {
+                width: 30px;
+                height: 30px;
+                font-size: 12px;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            button {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎵 Изучаем длительности нот 🎵</h1>
+            <p class="subtitle">Визуализация музыкальных ритмов и создание барабанных паттернов</p>
+        </header>
+        
+        <div class="app-description">
+            <p>Это интерактивное приложение помогает изучать длительности нот в музыке. Слева отображаются ноты с разными длительностями, а справа - барабанный секвенсор, который позволяет создавать ритмы, соответствующие этим длительностям.</p>
+        </div>
+        
+        <div class="controls">
+            <button onclick="newQuestion()">Новый пример</button>
+            <button onclick="playPattern()" id="playButton">Проиграть паттерн</button>
+            <button onclick="clearPattern()">Очистить паттерн</button>
+        </div>
+        
+        <div class="note-selector">
+            <h2>Выберите типы нот для генерации примеров:</h2>
+            <div class="note-types">
+                <div class="note-type selected" data-type="quarter">Четвертные</div>
+                <div class="note-type selected" data-type="eighth_pair">Восьмые (пара)</div>
+                <div class="note-type selected" data-type="sixteenth_quartet">Шестнадцатые (четверка)</div>
+                <div class="note-type selected" data-type="sixteenth_pair_eighth">2 шестнадцатых + восьмая</div>
+                <div class="note-type selected" data-type="eighth_sixteenth_pair">Восьмая + 2 шестнадцатых</div>
+                <div class="note-type selected" data-type="sixteenth_eighth_sixteenth">Шестнадцатая + восьмая + шестнадцатая</div>
+            </div>
+        </div>
+        
+        <canvas id="gameCanvas" width="800" height="300"></canvas>
+        
+        <div id="message"></div>
+        
+        <div class="drum-container">
+            <div class="drum-grid" id="drumGrid"></div>
+            <div class="drum-controls">
+                <div class="control-group">
+                    <input type="range" id="bpm" min="40" max="240" value="120">
+                    <span>BPM: <span id="bpmValue">120</span></span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="instructions">
+            <h2>Как использовать приложение</h2>
+            <ul>
+                <li><strong>Новый пример</strong> - генерирует случайные ноты с разными длительностями</li>
+                <li><strong>Выбор типов нот</strong> - кликните на тип ноты, чтобы включить/выключить его в генерации</li>
+                <li><strong>Создание паттерна</strong> - кликайте на ячейки в барабанном секвенсоре, чтобы создать ритм</li>
+                <li><strong>Проиграть паттерн</strong> - воспроизводит созданный барабанный паттерн</li>
+                <li><strong>Очистить паттерн</strong> - удаляет все активные ячейки в секвенсоре</li>
+                <li><strong>Соответствие длительностей</strong> - каждая группа из 4 ячеек соответствует одной ноте на нотном стане</li>
+            </ul>
+        </div>
+        
+        <footer>
+            <p>Интерактивное приложение для изучения музыкальных ритмов | Создано с использованием HTML5 Canvas и Web Audio API</p>
+        </footer>
+    </div>
+
+    <script>
+        // Игровая логика
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const messageDiv = document.getElementById('message');
+
+        const noteDurations = {
+            "quarter": {name: "Четвертная", beats: 1},
+            "eighth_pair": {name: "Восьмые", beats: 1},
+            "sixteenth_quartet": {name: "Шестнадцатые", beats: 1},
+            "sixteenth_pair_eighth": {name: "Две шестнадцатых + восьмая", beats: 2},
+            "eighth_sixteenth_pair": {name: "Восьмая + две шестнадцатых", beats: 2},
+            "sixteenth_eighth_sixteenth": {name: "Шестнадцатая + восьмая + шестнадцатая", beats: 2}
+        };
+
+        let currentNotes = { snare: [], kick: [] };
+        let selectedNoteTypes = new Set([
+            'quarter', 
+            'eighth_pair', 
+            'sixteenth_quartet', 
+            'sixteenth_pair_eighth',
+            'eighth_sixteenth_pair',
+            'sixteenth_eighth_sixteenth'
+        ]);
+
+        // Обработчики выбора типов нот
+        document.querySelectorAll('.note-type').forEach(el => {
+            el.addEventListener('click', function() {
+                const type = this.dataset.type;
+                if (selectedNoteTypes.has(type)) {
+                    selectedNoteTypes.delete(type);
+                    this.classList.remove('selected');
+                } else {
+                    selectedNoteTypes.add(type);
+                    this.classList.add('selected');
+                }
+            });
+        });
+
+        class MusicNotes {
+            constructor(ctx) {
+                this.ctx = ctx;
+                this.ovalWidth = 16;
+                this.ovalHeight = 10;
+                this.stemHeight = 55;
+                this.staffStartY = 150; // Начало нотного стана
+                this.lineSpacing = 20;  // Расстояние между линиями
+                // Ширина группы нот (как 4 шестнадцатых)
+                this.groupWidth = 96;
+                // Увеличенные позиции для 4 шестнадцатых нот (больше расстояние)
+                this.sixteenthPositions = [0, 32, 64, 96];
+            }
+            
+            clear() {
+                this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+                this.drawStaff();
+            }
+            
+            drawStaff() {
+                this.ctx.strokeStyle = '#333';
+                this.ctx.lineWidth = 1;
+                this.ctx.font = '14px Arial';
+                this.ctx.fillStyle = '#333';
+                this.ctx.textAlign = 'right';
+                
+                // Обратная нумерация: самая нижняя линия - 1, самая верхняя - 5
+                for (let i = 0; i < 5; i++) {
+                    // Рисуем линию
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(50, this.staffStartY + i * this.lineSpacing);
+                    this.ctx.lineTo(750, this.staffStartY + i * this.lineSpacing);
+                    this.ctx.stroke();
+                    
+                    // Добавляем номер линии (обратная нумерация)
+                    const lineNumber = 5 - i;
+                    this.ctx.fillText(lineNumber.toString(), 40, this.staffStartY + i * this.lineSpacing + 5);
+                }
+                
+                // Рисуем вертикальные линии для разделения групп
+                this.ctx.strokeStyle = '#999';
+                this.ctx.lineWidth = 1;
+                this.ctx.setLineDash([5, 5]);
+                for (let i = 0; i < 5; i++) {
+                    const x = 80 + i * 160;
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(x, this.staffStartY);
+                    this.ctx.lineTo(x, this.staffStartY + 4 * this.lineSpacing);
+                    this.ctx.stroke();
+                }
+                this.ctx.setLineDash([]);
+            }
+            
+            // Получаем Y-координату между 3 и 4 линиями (для snare)
+            getSnareNoteY() {
+                return this.staffStartY + 1.5 * this.lineSpacing; // Между 3 и 4 линией
+            }
+            
+            // Получаем Y-координату между 1 и 2 линиями (для kick)
+            getKickNoteY() {
+                return this.staffStartY + 3.5 * this.lineSpacing; // Между 1 и 2 линией
+            }
+            
+            drawQuarterNote(x, y, noteType = 'snare', color = 'black') {
+                const noteY = noteType === 'kick' ? this.getKickNoteY() : this.getSnareNoteY();
+                const stemTopY = noteY - this.stemHeight;
+                // Четвертная нота выравнивается по первой позиции
+                const noteX = x + this.sixteenthPositions[0];
+                const stemX = noteX + this.ovalWidth;
+                
+                this.ctx.beginPath();
+                this.ctx.moveTo(stemX, noteY - 5);
+                this.ctx.lineTo(stemX, stemTopY);
+                this.ctx.lineWidth = 2;
+                this.ctx.strokeStyle = color;
+                this.ctx.stroke();
+                
+                this.ctx.beginPath();
+                this.ctx.ellipse(noteX, noteY, this.ovalWidth, this.ovalHeight, 0, 0, 2 * Math.PI);
+                this.ctx.fillStyle = color;
+                this.ctx.fill();
+            }
+            
+            drawEighthPair(x, y, noteType = 'snare', color = 'black') {
+                const noteY = noteType === 'kick' ? this.getKickNoteY() : this.getSnareNoteY();
+                const stemTopY = noteY - this.stemHeight;
+                // Первая восьмая в позиции 0, вторая восьмая в позиции 64 (третья шестнадцатая)
+                const firstNoteX = x + this.sixteenthPositions[0];
+                const secondNoteX = x + this.sixteenthPositions[2];
+                const stemX1 = firstNoteX + this.ovalWidth;
+                const stemX2 = secondNoteX + this.ovalWidth;
+                const beamY = stemTopY + 5;
+                
+                this.ctx.beginPath();
+                this.ctx.moveTo(stemX1, noteY - 5);
+                this.ctx.lineTo(stemX1, beamY);
+                this.ctx.lineWidth = 2;
+                this.ctx.strokeStyle = color;
+                this.ctx.stroke();
+                
+                this.ctx.beginPath();
+                this.ctx.ellipse(firstNoteX, noteY, this.ovalWidth, this.ovalHeight, 0, 0, 2 * Math.PI);
+                this.ctx.fillStyle = color;
+                this.ctx.fill();
+                
+                this.ctx.beginPath();
+                this.ctx.moveTo(stemX2, noteY - 5);
+                this.ctx.lineTo(stemX2, beamY);
+                this.ctx.lineWidth = 2;
+                this.ctx.strokeStyle = color;
+                this.ctx.stroke();
+                
+                this.ctx.beginPath();
+                this.ctx.ellipse(secondNoteX, noteY, this.ovalWidth, this.ovalHeight, 0, 0, 2 * Math.PI);
+                this.ctx.fillStyle = color;
+                this.ctx.fill();
+                
+                this.ctx.beginPath();
+                this.ctx.moveTo(stemX1, beamY);
+                this.ctx.lineTo(stemX2, beamY);
+                this.ctx.lineWidth = 5;
+                this.ctx.strokeStyle = color;
+                this.ctx.stroke();
+            }
+            
+            drawSixteenthQuartet(x, y, noteType = 'snare', color = 'black') {
+                const noteY = noteType === 'kick' ? this.getKickNoteY() : this.getSnareNoteY();
+                const stemTopY = noteY - this.stemHeight;
+                const beamY1 = stemTopY + 5;
+                const beamY2 = stemTopY + 20;
+                
+                // 4 шестнадцатых в увеличенных позициях
+                for (let i = 0; i < 4; i++) {
+                    const noteX = x + this.sixteenthPositions[i];
+                    const stemX = noteX + this.ovalWidth;
+                    
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(stemX, noteY - 5);
+                    this.ctx.lineTo(stemX, stemTopY);
+                    this.ctx.lineWidth = 2;
+                    this.ctx.strokeStyle = color;
+                    this.ctx.stroke();
+                    
+                    this.ctx.beginPath();
+                    this.ctx.ellipse(noteX, noteY, this.ovalWidth, this.ovalHeight, 0, 0, 2 * Math.PI);
+                    this.ctx.fillStyle = color;
+                    this.ctx.fill();
+                }
+                
+                const firstStemX = x + this.sixteenthPositions[0] + this.ovalWidth;
+                const lastStemX = x + this.sixteenthPositions[3] + this.ovalWidth;
+                
+                this.ctx.beginPath();
+                this.ctx.moveTo(firstStemX, beamY1);
+                this.ctx.lineTo(lastStemX, beamY1);
+                this.ctx.lineWidth = 5;
+                this.ctx.strokeStyle = color;
+                this.ctx.stroke();
+                
+                this.ctx.beginPath();
+                this.ctx.moveTo(firstStemX, beamY2);
+                this.ctx.lineTo(lastStemX, beamY2);
+                this.ctx.lineWidth = 5;
+                this.ctx.strokeStyle = color;
+                this.ctx.stroke();
+                
+                for (let i = 0; i < 4; i++) {
+                    const stemX = x + this.sixteenthPositions[i] + this.ovalWidth;
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(stemX, beamY1);
+                    this.ctx.lineTo(stemX, beamY2);
+                    this.ctx.lineWidth = 2;
+                    this.ctx.strokeStyle = color;
+                    this.ctx.stroke();
+                }
+            }
+            
+            drawSixteenthPairEighth(x, y, noteType = 'snare', color = 'black') {
+                const noteY = noteType === 'kick' ? this.getKickNoteY() : this.getSnareNoteY();
+                const stemTopY = noteY - this.stemHeight;
+                const beamY1 = stemTopY + 5;
+                const beamY2 = stemTopY + 20;
+                const eighthBeamY = stemTopY + 5;
+                
+                // Две шестнадцатых в позициях 0 и 32, восьмая в позиции 96
+                const notePositions = [0, 32, 96];
+                
+                // Рисуем все ноты
+                for (let i = 0; i < 3; i++) {
+                    const noteX = x + notePositions[i];
+                    const stemX = noteX + this.ovalWidth;
+                    
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(stemX, noteY - 5);
+                    this.ctx.lineTo(stemX, stemTopY);
+                    this.ctx.lineWidth = 2;
+                    this.ctx.strokeStyle = color;
+                    this.ctx.stroke();
+                    
+                    this.ctx.beginPath();
+                    this.ctx.ellipse(noteX, noteY, this.ovalWidth, this.ovalHeight, 0, 0, 2 * Math.PI);
+                    this.ctx.fillStyle = color;
+                    this.ctx.fill();
+                }
+                
+                // Соединяем две шестнадцатые
+                const firstStemX = x + notePositions[0] + this.ovalWidth;
+                const secondStemX = x + notePositions[1] + this.ovalWidth;
+                
+                this.ctx.beginPath();
+                this.ctx.moveTo(firstStemX, beamY1);
+                this.ctx.lineTo(secondStemX, beamY1);
+                this.ctx.lineWidth = 5;
+                this.ctx.strokeStyle = color;
+                this.ctx.stroke();
+                
+                this.ctx.beginPath();
+                this.ctx.moveTo(firstStemX, beamY2);
+                this.ctx.lineTo(secondStemX, beamY2);
+                this.ctx.lineWidth = 5;
+                this.ctx.strokeStyle = color;
+                this.ctx.stroke();
+                
+                for (let i = 0; i < 2; i++) {
+                    const stemX = x + notePositions[i] + this.ovalWidth;
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(stemX, beamY1);
+                    this.ctx.lineTo(stemX, beamY2);
+                    this.ctx.lineWidth = 2;
+                    this.ctx.strokeStyle = color;
+                    this.ctx.stroke();
+                }
+                
+                // Соединяем вторую шестнадцатую с восьмой
+                const thirdStemX = x + notePositions[2] + this.ovalWidth;
+                this.ctx.beginPath();
+                this.ctx.moveTo(thirdStemX, eighthBeamY);
+                this.ctx.lineTo(secondStemX, eighthBeamY);
+                this.ctx.lineWidth = 5;
+                this.ctx.strokeStyle = color;
+                this.ctx.stroke();
+            }
+            
+            drawEighthSixteenthPair(x, y, noteType = 'snare', color = 'black') {
+                const noteY = noteType === 'kick' ? this.getKickNoteY() : this.getSnareNoteY();
+                const stemTopY = noteY - this.stemHeight;
+                const beamY1 = stemTopY + 5;
+                const beamY2 = stemTopY + 20;
+                
+                // Восьмая в позиции 0, первая шестнадцатая в позиции 64 (третья шестнадцатая), 
+                // вторая шестнадцатая в позиции 96 (четвертая шестнадцатая)
+                const notePositions = [0, 64, 96];
+                
+                // Рисуем все ноты
+                for (let i = 0; i < 3; i++) {
+                    const noteX = x + notePositions[i];
+                    const stemX = noteX + this.ovalWidth;
+                    
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(stemX, noteY - 5);
+                    this.ctx.lineTo(stemX, stemTopY);
+                    this.ctx.lineWidth = 2;
+                    this.ctx.strokeStyle = color;
+                    this.ctx.stroke();
+                    
+                    this.ctx.beginPath();
+                    this.ctx.ellipse(noteX, noteY, this.ovalWidth, this.ovalHeight, 0, 0, 2 * Math.PI);
+                    this.ctx.fillStyle = color;
+                    this.ctx.fill();
+                }
+                
+                // Соединяем все три ноты
+                const firstStemX = x + notePositions[0] + this.ovalWidth;
+                const secondStemX = x + notePositions[1] + this.ovalWidth;
+                const thirdStemX = x + notePositions[2] + this.ovalWidth;
+                
+                this.ctx.beginPath();
+                this.ctx.moveTo(firstStemX, beamY1);
+                this.ctx.lineTo(thirdStemX, beamY1);
+                this.ctx.lineWidth = 5;
+                this.ctx.strokeStyle = color;
+                this.ctx.stroke();
+                
+                this.ctx.beginPath();
+                this.ctx.moveTo(secondStemX, beamY2);
+                this.ctx.lineTo(thirdStemX, beamY2);
+                this.ctx.lineWidth = 5;
+                this.ctx.strokeStyle = color;
+                this.ctx.stroke();
+                
+                this.ctx.beginPath();
+                this.ctx.moveTo(firstStemX, beamY1);
+                this.ctx.lineTo(firstStemX, beamY2 - 15);
+                this.ctx.lineWidth = 2;
+                this.ctx.strokeStyle = color;
+                this.ctx.stroke();
+                
+                this.ctx.beginPath();
+                this.ctx.moveTo(secondStemX, beamY1);
+                this.ctx.lineTo(secondStemX, beamY2);
+                this.ctx.lineWidth = 2;
+                this.ctx.strokeStyle = color;
+                this.ctx.stroke();
+                
+                this.ctx.beginPath();
+                this.ctx.moveTo(thirdStemX, beamY1);
+                this.ctx.lineTo(thirdStemX, beamY2);
+                this.ctx.lineWidth = 2;
+                this.ctx.strokeStyle = color;
+                this.ctx.stroke();
+            }
+            
+            drawSixteenthEighth_sixteenth(x, y, noteType = 'snare', color = 'black') {
+                const noteY = noteType === 'kick' ? this.getKickNoteY() : this.getSnareNoteY();
+                const stemTopY = noteY - this.stemHeight;
+                const beamY1 = stemTopY + 5;
+                const beamY2 = stemTopY + 20;
+                
+                // Шестнадцатая в позиции 0, восьмая в позиции 64, шестнадцатая в позиции 96
+                const notePositions = [0, 64, 96];
+                
+                // Рисуем все ноты
+                for (let i = 0; i < 3; i++) {
+                    const noteX = x + notePositions[i];
+                    const stemX = noteX + this.ovalWidth;
+                    
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(stemX, noteY - 5);
+                    this.ctx.lineTo(stemX, stemTopY);
+                    this.ctx.lineWidth = 2;
+                    this.ctx.strokeStyle = color;
+                    this.ctx.stroke();
+                    
+                    this.ctx.beginPath();
+                    this.ctx.ellipse(noteX, noteY, this.ovalWidth, this.ovalHeight, 0, 0, 2 * Math.PI);
+                    this.ctx.fillStyle = color;
+                    this.ctx.fill();
+                }
+                
+                // Соединяем все три ноты
+                const firstStemX = x + notePositions[0] + this.ovalWidth;
+                const secondStemX = x + notePositions[1] + this.ovalWidth;
+                const thirdStemX = x + notePositions[2] + this.ovalWidth;
+                
+                this.ctx.beginPath();
+                this.ctx.moveTo(firstStemX, beamY1);
+                this.ctx.lineTo(thirdStemX, beamY1);
+                this.ctx.lineWidth = 5;
+                this.ctx.strokeStyle = color;
+                this.ctx.stroke();
+                
+                this.ctx.beginPath();
+                this.ctx.moveTo(firstStemX, beamY2);
+                this.ctx.lineTo(firstStemX + 16, beamY2);
+                this.ctx.lineWidth = 5;
+                this.ctx.strokeStyle = color;
+                this.ctx.stroke();
+                
+                this.ctx.beginPath();
+                this.ctx.moveTo(thirdStemX - 16, beamY2);
+                this.ctx.lineTo(thirdStemX, beamY2);
+                this.ctx.lineWidth = 5;
+                this.ctx.strokeStyle = color;
+                this.ctx.stroke();
+                
+                this.ctx.beginPath();
+                this.ctx.moveTo(firstStemX, beamY1);
+                this.ctx.lineTo(firstStemX, beamY2);
+                this.ctx.lineWidth = 2;
+                this.ctx.strokeStyle = color;
+                this.ctx.stroke();
+                
+                this.ctx.beginPath();
+                this.ctx.moveTo(secondStemX, beamY1);
+                this.ctx.lineTo(secondStemX, beamY2 - 15);
+                this.ctx.lineWidth = 2;
+                this.ctx.strokeStyle = color;
+                this.ctx.stroke();
+                
+                this.ctx.beginPath();
+                this.ctx.moveTo(thirdStemX, beamY1);
+                this.ctx.lineTo(thirdStemX, beamY2);
+                this.ctx.lineWidth = 2;
+                this.ctx.strokeStyle = color;
+                this.ctx.stroke();
+            }
+            
+            drawNote(noteType, x, y, drumType = 'snare') {
+                switch(noteType) {
+                    case 'quarter':
+                        this.drawQuarterNote(x, y, drumType);
+                        break;
+                    case 'eighth_pair':
+                        this.drawEighthPair(x, y, drumType);
+                        break;
+                    case 'sixteenth_quartet':
+                        this.drawSixteenthQuartet(x, y, drumType);
+                        break;
+                    case 'sixteenth_pair_eighth':
+                        this.drawSixteenthPairEighth(x, y, drumType);
+                        break;
+                    case 'eighth_sixteenth_pair':
+                        this.drawEighthSixteenthPair(x, y, drumType);
+                        break;
+                    case 'sixteenth_eighth_sixteenth':
+                        this.drawSixteenthEighth_sixteenth(x, y, drumType);
+                        break;
+                }
+            }
+        }
+
+        const notes = new MusicNotes(ctx);
+
+        function newQuestion() {
+            currentNotes = { snare: [], kick: [] };
+            messageDiv.textContent = "";
+            messageDiv.className = "";
+            
+            const noteKeys = Array.from(selectedNoteTypes);
+            if (noteKeys.length === 0) {
+                messageDiv.textContent = "Пожалуйста, выберите хотя бы один тип нот";
+                messageDiv.className = "incorrect";
+                return;
+            }
+            
+            const positions = [120, 280, 440, 600];
+            
+            // Генерируем ноты для обеих дорожек одновременно
+            for (let i = 0; i < 4; i++) {
+                const noteType = noteKeys[Math.floor(Math.random() * noteKeys.length)];
+                
+                // Добавляем ноты для snare (между 3 и 4 линиями)
+                currentNotes.snare.push({
+                    type: noteType,
+                    position: positions[i],
+                    beats: noteDurations[noteType].beats
+                });
+                
+                // Добавляем ноты для kick (между 1 и 2 линиями)
+                const kickNoteType = noteKeys[Math.floor(Math.random() * noteKeys.length)];
+                currentNotes.kick.push({
+                    type: kickNoteType,
+                    position: positions[i],
+                    beats: noteDurations[kickNoteType].beats
+                });
+            }
+            
+            drawNotes();
+        }
+
+        function drawNotes() {
+            notes.clear();
+            
+            // Рисуем ноты для snare (между 3 и 4 линиями)
+            for (let i = 0; i < currentNotes.snare.length; i++) {
+                const note = currentNotes.snare[i];
+                notes.drawNote(note.type, note.position, 0, 'snare');
+            }
+            
+            // Рисуем ноты для kick (между 1 и 2 линиями)
+            for (let i = 0; i < currentNotes.kick.length; i++) {
+                const note = currentNotes.kick[i];
+                notes.drawNote(note.type, note.position, 0, 'kick');
+            }
+        }
+
+        // Барабанный секвенсор
+        class DrumSequencer {
+            constructor() {
+                this.tracks = ['snare', 'kick'];
+                this.steps = 16;
+                this.bpm = 120;
+                this.pattern = {
+                    'snare': new Array(this.steps).fill(0),
+                    'kick': new Array(this.steps).fill(0)
+                };
+                this.isPlaying = false;
+                this.currentStep = 0;
+                this.intervalId = null;
+                this.audioContext = null;
+                this.samples = {};
+                this.audioReady = false;
+                
+                this.renderGrid();
+                this.setupEventListeners();
+                this.initAudio();
+            }
+
+            async initAudio() {
+                try {
+                    this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    
+                    // Создаем простые синтезированные звуки вместо загрузки файлов
+                    this.samples.snare = this.createSnareSound();
+                    this.samples.kick = this.createKickSound();
+                    
+                    this.audioReady = true;
+                    console.log('Синтезированные звуки готовы к использованию');
+                } catch (e) {
+                    console.error('Ошибка создания аудио:', e);
+                }
+            }
+
+            // Создание синтезированного звука snare
+            createSnareSound() {
+                const sampleRate = this.audioContext.sampleRate;
+                const duration = 0.2;
+                const numFrames = sampleRate * duration;
+                const buffer = this.audioContext.createBuffer(1, numFrames, sampleRate);
+                const data = buffer.getChannelData(0);
+                
+                for (let i = 0; i < numFrames; i++) {
+                    // Белый шум
+                    data[i] = (Math.random() * 2 - 1) * (1 - i / numFrames);
+                }
+                
+                return buffer;
+            }
+
+            // Создание синтезированного звука kick
+            createKickSound() {
+                const sampleRate = this.audioContext.sampleRate;
+                const duration = 0.5;
+                const numFrames = sampleRate * duration;
+                const buffer = this.audioContext.createBuffer(1, numFrames, sampleRate);
+                const data = buffer.getChannelData(0);
+                
+                for (let i = 0; i < numFrames; i++) {
+                    const t = i / sampleRate;
+                    // Синусоида с затуханием
+                    data[i] = Math.sin(2 * Math.PI * 100 * t) * Math.exp(-t * 8);
+                }
+                
+                return buffer;
+            }
+
+            playSound(name) {
+                if (!this.audioReady) {
+                    console.warn('Звук ещё не готов');
+                    return;
+                }
+                const buffer = this.samples[name];
+                if (!buffer) {
+                    console.warn(`Сэмпл "${name}" не найден`);
+                    return;
+                }
+
+                try {
+                    const src = this.audioContext.createBufferSource();
+                    src.buffer = buffer;
+                    src.connect(this.audioContext.destination);
+                    src.start(0);
+                } catch (e) {
+                    console.error(`Ошибка воспроизведения ${name}:`, e);
+                }
+            }
+
+            renderGrid() {
+                const grid = document.getElementById('drumGrid');
+                if (!grid) {
+                    console.error('#drumGrid элемент не найден в DOM');
+                    return;
+                }
+                grid.innerHTML = '';
+
+                this.tracks.forEach(trackName => {
+                    const row = document.createElement('div');
+                    row.className = 'track-row';
+
+                    const nameDiv = document.createElement('div');
+                    nameDiv.className = 'track-name';
+                    nameDiv.textContent = trackName === 'snare' ? 'Малый барабан' : 'Большой барабан';
+                    row.appendChild(nameDiv);
+
+                    const stepsDiv = document.createElement('div');
+                    stepsDiv.className = 'track-steps';
+
+                    this.pattern[trackName].forEach((v, i) => {
+                        const stepDiv = document.createElement('div');
+                        stepDiv.className = `step ${v ? 'active' : ''}`;
+                        const groupIndex = Math.floor(i / 4);
+                        stepDiv.classList.add(`group-${groupIndex % 4}`);
+                        stepDiv.dataset.track = trackName;
+                        stepDiv.dataset.step = i;
+                        stepDiv.textContent = v ? '●' : '';
+                        stepDiv.addEventListener('click', () => this.toggleStep(trackName, i));
+                        stepsDiv.appendChild(stepDiv);
+                    });
+
+                    row.appendChild(stepsDiv);
+                    grid.appendChild(row);
+                });
+            }
+
+            toggleStep(track, step) {
+                this.pattern[track][step] = this.pattern[track][step] ? 0 : 1;
+                this.renderGrid();
+            }
+
+            playPattern() {
+                if (this.isPlaying) {
+                    this.stopPattern();
+                    return;
+                }
+
+                if (this.audioContext && this.audioContext.state === 'suspended') {
+                    this.audioContext.resume();
+                }
+
+                if (!this.audioReady) {
+                    alert('Звук ещё не готов. Пожалуйста, подождите.');
+                    return;
+                }
+
+                this.isPlaying = true;
+                document.getElementById('playButton').textContent = 'Остановить паттерн';
+
+                const stepTime = (60 / this.bpm) / 4 * 1000;
+
+                this.intervalId = setInterval(() => {
+                    this.highlightStep(this.currentStep);
+
+                    // Играем все активные звуки на текущем шаге
+                    this.tracks.forEach(track => {
+                        if (this.pattern[track][this.currentStep]) {
+                            this.playSound(track);
+                        }
+                    });
+
+                    this.currentStep = (this.currentStep + 1) % this.steps;
+                }, stepTime);
+            }
+
+            stopPattern() {
+                this.isPlaying = false;
+                clearInterval(this.intervalId);
+                document.getElementById('playButton').textContent = 'Проиграть паттерн';
+                this.clearHighlights();
+                this.currentStep = 0;
+            }
+
+            highlightStep(step) {
+                this.clearHighlights();
+                const cells = document.querySelectorAll(`.step[data-step="${step}"]`);
+                cells.forEach(cell => cell.classList.add('playing'));
+            }
+
+            clearHighlights() {
+                const cells = document.querySelectorAll('.step.playing');
+                cells.forEach(c => c.classList.remove('playing'));
+            }
+
+            clearPattern() {
+                this.tracks.forEach(track => {
+                    this.pattern[track] = new Array(this.steps).fill(0);
+                });
+                this.renderGrid();
+                this.stopPattern();
+            }
+
+            setBPM(val) {
+                this.bpm = val;
+                if (this.isPlaying) {
+                    this.stopPattern();
+                    this.playPattern();
+                }
+            }
+
+            setupEventListeners() {
+                const bpmSlider = document.getElementById('bpm');
+                const bpmVal = document.getElementById('bpmValue');
+                if (bpmSlider && bpmVal) {
+                    bpmSlider.addEventListener('input', () => {
+                        this.setBPM(parseInt(bpmSlider.value, 10));
+                        bpmVal.textContent = this.bpm;
+                    });
+                }
+            }
+        }
+
+        let drumSequencer;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            drumSequencer = new DrumSequencer();
+            window.playPattern = () => drumSequencer.playPattern();
+            window.clearPattern = () => drumSequencer.clearPattern();
+            // Генерируем первый пример при загрузке
+            newQuestion();
+        });
+    </script>
+</body>
+</html>

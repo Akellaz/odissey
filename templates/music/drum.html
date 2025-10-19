@@ -2,6 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Барабанная секвенция</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/drum-library.css') }}">
 </head>
@@ -11,13 +12,6 @@
         
         <div class="drum-container">
             <div class="drum-controls">
-                <div class="control-group">
-                    <input type="text" id="patternName" placeholder="Имя паттерна" value="default">
-                    <button onclick="savePattern()">Сохранить</button>
-                    <button onclick="loadPattern()">Загрузить</button>
-                    <button onclick="clearPattern()">Очистить</button>
-                </div>
-                
                 <div class="control-group">
                     <button onclick="playPattern()" id="playButton">Проиграть</button>
                     <input type="range" id="bpm" min="40" max="240" value="120">
@@ -29,11 +23,14 @@
             
             <div class="pattern-list">
                 <h3>Сохраненные паттерны:</h3>
-                <select id="patternSelect" onchange="loadSelectedPattern()">
+                <select id="patternSelect">
                     <option value="">Выберите паттерн...</option>
                 </select>
                 <button onclick="refreshPatternList()">Обновить список</button>
             </div>
+
+            <!-- Контейнер для нотного стана -->
+            <div id="notesContainer"></div>
         </div>
     </div>
 
